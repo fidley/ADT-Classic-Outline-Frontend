@@ -40,6 +40,9 @@ public class LinkedObject {
 		if (linkedEditor != null) {
 			if (linkedEditor.getModel() != null) {
 				this.type = linkedEditor.getModel().getType();
+				if (this.type.equals("PROG/I") || this.type.equals("FUGR/I")) {
+					this.type = "REPS";
+				}
 			}
 
 		}

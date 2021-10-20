@@ -3,8 +3,6 @@ package com.abapblog.classicOutline.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.State;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TreePath;
@@ -13,12 +11,10 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.dialogs.FilteredTree;
-import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.part.ViewPart;
 
 import com.abapblog.classicOutline.tree.TreeCellLabelProvider;
@@ -34,7 +30,6 @@ import com.sap.adt.tools.core.IAdtObjectReference;
 
 public class View extends ViewPart
 		implements ILinkedWithEditorView, ILogonListener, IAbapPageLoadListener, IActivationSuccessListener {
-	private static Long changeDate;
 	protected static TreeViewer viewer;
 	private static TreeContentProvider contentProvider;
 	private Composite parent;
@@ -42,7 +37,6 @@ public class View extends ViewPart
 	protected IPartListener2 linkWithEditorPartListener = new LinkWithEditorPartListener(this);
 	public LinkedObject linkedObject = new LinkedObject(null, null);
 	private ArrayList<TreeContentProvider> contentProviders = new ArrayList<TreeContentProvider>();
-	private Boolean pageLoadListenerAdded = false;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -101,10 +95,12 @@ public class View extends ViewPart
 			linkedObject = ProjectUtility.getObjectFromEditor();
 			if (linkedObject == null || linkedObject.isEmpty())
 				return;
-			contentProvider = getContentProvider(linkedObject);
-			getViewer().setContentProvider(contentProvider);
-			treeViewerRefresh();
-			getViewer().expandToLevel(2);
+			new Thread(() -> {
+				contentProvider = getContentProvider(linkedObject);
+				getViewer().setContentProvider(contentProvider);
+				treeViewerRefresh();
+				getViewer().expandToLevel(2);
+			}).start();
 		}
 	}
 
@@ -122,12 +118,25 @@ public class View extends ViewPart
 			if (linkedObject == null || linkedObject.isEmpty())
 				return;
 			if (!linkedObject.equals(contentProvider.getLinkedObject())) {
-				contentProvider.setElements(getViewer().getExpandedElements());
-				contentProvider.setTreePaths(getViewer().getExpandedTreePaths());
-				contentProvider = getContentProvider(linkedObject);
-				getViewer().setContentProvider(contentProvider);
-				treeViewerRefresh();
-				expandTree();
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							try {
+								contentProvider.setElements(getViewer().getExpandedElements());
+								contentProvider.setTreePaths(getViewer().getExpandedTreePaths());
+							} catch (Exception e) {
+							}
+							contentProvider = getContentProvider(linkedObject);
+							getViewer().setContentProvider(contentProvider);
+							treeViewerRefresh();
+							expandTree();
+						} catch (Exception e) {
+						}
+					}
+
+				});
 			}
 		}
 	}
@@ -151,10 +160,11 @@ public class View extends ViewPart
 	}
 
 	public boolean isLinkingActive() {
-		ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
-		Command toggleCommand = commandService.getCommand(LinkWithEditorHandler.ID);
-		State state = toggleCommand.getState(RegistryToggleState.STATE_ID);
-		return (Boolean) state.getValue();
+//		ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+//		Command toggleCommand = commandService.getCommand(LinkWithEditorHandler.ID);
+//		State state = toggleCommand.getState(RegistryToggleState.STATE_ID);
+//		return (Boolean) state.getValue();
+		return true;
 	}
 
 	public void callEditorActivationWhenNeeded(final boolean linkingActive) {
@@ -222,14 +232,20 @@ public class View extends ViewPart
 	}
 
 	private void reloadOutlineContent() {
-		linkedObject = ProjectUtility.getObjectFromEditor();
-		contentProvider.setElements(getViewer().getExpandedElements());
-		contentProvider.setTreePaths(getViewer().getExpandedTreePaths());
-		contentProvider = getContentProvider(linkedObject);
-		contentProvider.setRefreshTree(true);
-		contentProvider.initialize();
-		getViewer().setContentProvider(contentProvider);
-		treeViewerRefresh();
-		expandTree();
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				linkedObject = ProjectUtility.getObjectFromEditor();
+				contentProvider.setElements(getViewer().getExpandedElements());
+				contentProvider.setTreePaths(getViewer().getExpandedTreePaths());
+				contentProvider = getContentProvider(linkedObject);
+				contentProvider.setRefreshTree(true);
+				contentProvider.initialize();
+				getViewer().setContentProvider(contentProvider);
+				treeViewerRefresh();
+				expandTree();
+			}
+
+		});
 	};
 }

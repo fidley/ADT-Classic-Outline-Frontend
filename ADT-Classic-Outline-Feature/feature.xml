@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ADT_Classic_Outline_Feature"
-      label="ADT Classic Outline Feature"
+      label="ADT Classic Outline"
       version="1.0.0.qualifier"
       provider-name="Abapblog.com"
       plugin="com.abapblog.branding"

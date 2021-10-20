@@ -185,6 +185,8 @@ public class TreeNode implements IAdaptable {
 		}
 		case "CI":
 		case "OI": {
+			if (linkedObject.getType().contains("FUGR"))
+				return "FUGR/I";
 			return "PROG/I";
 		}
 		case "CT":

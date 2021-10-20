@@ -2,6 +2,7 @@ package com.abapblog.classicOutline.api.rfc;
 
 import com.abapblog.classicOutline.api.IApiCaller;
 import com.abapblog.classicOutline.tree.ObjectTree;
+import com.abapblog.classicOutline.tree.SourceNode;
 import com.abapblog.classicOutline.tree.TreeNode;
 import com.abapblog.classicOutline.utils.ProjectUtility;
 import com.abapblog.classicOutline.views.LinkedObject;
@@ -32,10 +33,17 @@ public class RfcCaller implements IApiCaller {
 			String destinationId = ProjectUtility.getDestinationID(linkedObject.getProject());
 			JCoDestination destination = JCoDestinationManager.getDestination(destinationId);
 			JCoFunction function = destination.getRepository().getFunction("Z_ADTCO_GET_OBJECT_TREE");
-			if (function == null)
-				throw new RuntimeException("Z_ADTCO_GET_OBJECT_TREE not found. "
+			if (function == null) {
+				ObjectTree newObjectTree = new ObjectTree(linkedObject);
+				SourceNode sourceNode = new SourceNode(1);
+				sourceNode.setName("DummyNode");
+				sourceNode.setText1("Z_ADTCO_GET_OBJECT_TREE not found. "
 						+ "This plugin needs a ABAP Backend components that have to be installed in the system in order to use it."
 						+ "Use abapGit to install repository from https://github.com/fidley/ADT-Classic-Outline-Backend");
+				sourceNode.setType("CO");
+				newObjectTree.addChild(sourceNode);
+				return newObjectTree;
+			}
 			function.getImportParameterList().getField("OBJECT_NAME").setValue(linkedObject.getName());
 			function.getImportParameterList().getField("OBJECT_TYPE").setValue(linkedObject.getType());
 			try {
@@ -58,11 +66,11 @@ public class RfcCaller implements IApiCaller {
 	public ObjectTree getObjectTree(LinkedObject linkedObject) {
 		int count = 0;
 		while (objectsList.size() > count) {
-			ObjectTree rfcClassTree = objectsList.get(count);
-			if (rfcClassTree.getLinkedObject().getName() == linkedObject.getName()
-					&& rfcClassTree.getLinkedObject().getProject().getName() == linkedObject.getProject().getName()
-					&& rfcClassTree.getLinkedObject().getType() == linkedObject.getType()) {
-				return rfcClassTree;
+			ObjectTree rfcObjectTree = objectsList.get(count);
+			if (rfcObjectTree.getLinkedObject().getName() == linkedObject.getName()
+					&& rfcObjectTree.getLinkedObject().getProject().getName() == linkedObject.getProject().getName()
+					&& rfcObjectTree.getLinkedObject().getType() == linkedObject.getType()) {
+				return rfcObjectTree;
 			}
 			count++;
 		}

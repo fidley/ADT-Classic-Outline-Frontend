@@ -19,9 +19,19 @@ public class AbapPageLoadListener extends AbstractAbapSourcePageExtensionProcess
 
 	@Override
 	public void processOnDocumentLoaded(IAbapSourcePage sourcePage) {
-		listeners.forEach(listener -> {
-			listener.pageLoaded(sourcePage);
-			removeListener(listener);
-		});
+		if (listeners.size() == 0) {
+			return;
+		}
+		try {
+			listeners.forEach(listener -> {
+				if (listener != null) {
+
+					listener.pageLoaded(sourcePage);
+					removeListener(listener);
+
+				}
+			});
+		} catch (Exception e) {
+		}
 	}
 }

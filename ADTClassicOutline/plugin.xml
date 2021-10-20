@@ -15,26 +15,6 @@
       </view>
    </extension>
    <extension
-         point="org.eclipse.ui.commands">
-      <command
-            defaultHandler="com.abapblog.classicOutline.views.LinkWithEditorHandler"
-            description="Link With Editor"
-            id="com.abapblog.classicOutline.LinkWithEditor"
-            name="Link With Editor">
-         <state
-               class="com.abapblog.classicOutline.views.LinkWithEditorState"
-               id="org.eclipse.ui.commands.toggleState">
-         </state>
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commandImages">
-      <image
-            commandId="com.abapblog.classicOutline.LinkWithEditor"
-            icon="platform:/plugin/org.eclipse.ui.ide/icons/full/elcl16/synced.png">
-      </image>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="com.abapblog.classicOutline.preferences.PreferenceInitilizer">

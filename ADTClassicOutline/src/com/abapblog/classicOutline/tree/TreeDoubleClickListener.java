@@ -36,7 +36,9 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 	}
 
 	private String getDefinitionURI(TreeNode selectedNode, String uri, IProject project) {
-		if (selectedNode.getType().equals("OOLD") && !selectedNode.getLinkedObject().getType().contains("CLAS")) {
+		if ((selectedNode.getType().equals("OOLD") && !selectedNode.getLinkedObject().getType().contains("CLAS"))
+				|| ((selectedNode.getType().substring(0, 2).equals("OOLD")
+						&& selectedNode.getLinkedObject().getType().contains("REPS")))) {
 
 			IAbapNavigationServices navigationService = AbapNavigationServicesFactory.getInstance()
 					.createNavigationService(project.getName());
