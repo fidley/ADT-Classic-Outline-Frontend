@@ -18,6 +18,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
 import com.abapblog.classicOutline.views.LinkedObject;
+import com.abapblog.classicOutline.views.View;
 import com.sap.adt.destinations.logon.AdtLogonServiceFactory;
 import com.sap.adt.destinations.model.IAuthenticationToken;
 import com.sap.adt.destinations.model.IDestinationData;
@@ -69,7 +70,21 @@ public class ProjectUtility {
 		if (editor instanceof IAdtFormEditor) {
 			IAdtFormEditor formEditor = (IAdtFormEditor) editor;
 			if (formEditor.getModel() != null) {
-				return new LinkedObject(formEditor, getActiveAdtProject());
+				int count = 0;
+				IProject project = getActiveAdtProject();
+				while (View.linkedObjects.size() > count) {
+					LinkedObject currentlyLinkedObject = View.linkedObjects.get(count);
+
+					if (currentlyLinkedObject.getName().equals(formEditor.getModel().getName())
+							&& currentlyLinkedObject.getType().equals(formEditor.getModel().getType())
+							&& currentlyLinkedObject.getProject().equals(project)) {
+						return currentlyLinkedObject;
+					}
+					count++;
+				}
+				LinkedObject linkedObject = new LinkedObject(formEditor, project);
+				View.linkedObjects.add(linkedObject);
+				return linkedObject;
 			}
 		}
 		return null;

@@ -20,8 +20,8 @@ public class ClassPageStateListener implements IElementStateListener {
 		if (!isDirty && getInput().equals(element)) {
 			contentProvider.setRefreshTree(true);
 			contentProvider.initialize();
-			contentProvider.getView().treeViewerRefresh();
-			contentProvider.getView().getViewer().expandToLevel(2);
+			// contentProvider.getView().treeViewerRefresh();
+			// contentProvider.getView().getViewer().expandToLevel(2);
 		}
 	}
 

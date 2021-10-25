@@ -7,7 +7,6 @@ import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import com.abapblog.classicOutline.tree.TreeContentProvider;
@@ -22,7 +21,7 @@ public class ClassPageChangeListener implements IPageChangedListener {
 
 	public ClassPageChangeListener(TreeContentProvider treeContentProvider) {
 		this.treeContentProvider = treeContentProvider;
-		IEditorPart activeEditor =ProjectUtility.getActiveEditor();
+		IEditorPart activeEditor = ProjectUtility.getActiveEditor();
 		if (activeEditor instanceof IMultiPageClassEditor) {
 			IMultiPageClassEditor classEditor = (IMultiPageClassEditor) activeEditor;
 			List<IAbapSourcePage> loadedPages = classEditor.getLoadedPages();

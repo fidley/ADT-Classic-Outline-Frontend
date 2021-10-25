@@ -28,9 +28,11 @@ Require-Bundle: org.eclipse.ui,
  com.sap.adt.communication,
  org.eclipse.ui.workbench,
  com.sap.adt.ris.search,
- com.sap.adt.activation.ui
+ com.sap.adt.activation.ui,
+ org.eclipse.jface.text;bundle-version="3.18.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8,
  JavaSE-15
 Automatic-Module-Name: com.abapblog.classicOutline
 Bundle-ActivationPolicy: lazy
-Import-Package: com.sap.adt.sapgui.ui.editors
+Import-Package: com.sap.adt.sapgui.ui.editors,
+ org.eclipse.draw2d

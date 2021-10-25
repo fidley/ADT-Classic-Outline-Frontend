@@ -23,7 +23,7 @@
    <extension
          point="com.sap.adt.destinations.logonListeners">
       <listener
-            class="com.abapblog.classicOutline.views.View">
+            class="com.abapblog.classicOutline.views.LogonListenerHandler">
       </listener>
    </extension>
       <extension
@@ -35,7 +35,7 @@
       <extension
          point="com.sap.adt.activation.ui.activationSuccessListener">
       <onActivationSuccess
-            class="com.abapblog.classicOutline.views.View">
+            class="com.abapblog.classicOutline.views.ActivationSuccessListenerHandler">
       </onActivationSuccess>
    </extension>
 </plugin>

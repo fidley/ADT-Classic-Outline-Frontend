@@ -1,5 +1,8 @@
 package com.abapblog.classicOutline.tree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.ui.IEditorPart;
 
@@ -7,7 +10,6 @@ import com.abapblog.classicOutline.api.ApiCallerFactory;
 import com.abapblog.classicOutline.utils.ClassPageChangeListener;
 import com.abapblog.classicOutline.utils.ProjectUtility;
 import com.abapblog.classicOutline.views.LinkedObject;
-import com.abapblog.classicOutline.views.View;
 import com.sap.adt.oo.ui.classes.IMultiPageClassEditor;
 
 @SuppressWarnings("restriction")
@@ -17,13 +19,13 @@ public class TreeContentProvider implements ITreeContentProvider {
 	private Object[] elements;
 	private boolean refreshTree = false;
 	private org.eclipse.jface.viewers.TreePath[] treePaths;
-	private View view;
+	// private View view;
 
-	public TreeContentProvider(LinkedObject linkedObject, View view) {
+	public TreeContentProvider(LinkedObject linkedObject) {
 		super();
 		this.setLinkedObject(linkedObject);
-		addClassPageListener();
-		setView(view);
+		// addClassPageListener();
+		// setView(view);
 
 	}
 
@@ -82,7 +84,43 @@ public class TreeContentProvider implements ITreeContentProvider {
 	}
 
 	public Object[] getElements() {
-		return elements;
+		if (invisibleRoot == null)
+			initialize();
+		return getChildren(invisibleRoot);
+	}
+
+	public Object[] getAllElements() {
+		List<Object> allChildren = new ArrayList<Object>();
+		if (invisibleRoot == null)
+			initialize();
+
+		Object[] childrens = getChildren(invisibleRoot);
+		for (int i = 0; i < childrens.length; i++) {
+			try {
+				TreeParent child = (TreeParent) childrens[i];
+				allChildren.add(child);
+				getSubnodes(child, allChildren);
+			} catch (Exception e) {
+
+			}
+		}
+		return allChildren.toArray();
+	}
+
+	private void getSubnodes(TreeParent parent, List<Object> allChildren) {
+		if (parent.hasChildren()) {
+			Object[] childrens = getChildren(parent);
+			for (int i = 0; i < childrens.length; i++) {
+				try {
+					TreeParent child = (TreeParent) childrens[i];
+					allChildren.add(child);
+					getSubnodes(child, allChildren);
+				} catch (Exception e) {
+
+				}
+			}
+
+		}
 	}
 
 	public void setElements(Object[] elements) {
@@ -104,14 +142,14 @@ public class TreeContentProvider implements ITreeContentProvider {
 	public void setRefreshTree(boolean refreshTree) {
 		this.refreshTree = refreshTree;
 	}
-
-	public View getView() {
-		return view;
-	}
-
-	public void setView(View view) {
-		this.view = view;
-	}
+//
+//	public View getView() {
+//		return view;
+//	}
+//
+//	public void setView(View view) {
+//		this.view = view;
+//	}
 
 	public LinkedObject getLinkedObject() {
 		return linkedObject;

@@ -1,6 +1,7 @@
 package com.abapblog.classicOutline.tree;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import com.abapblog.classicOutline.views.LinkedObject;
 
@@ -29,6 +30,18 @@ public class TreeParent extends TreeNode {
 
 	public boolean hasChildren() {
 		return !children.isEmpty();
+	}
+
+	@Override
+	public int hashCode() {
+		TreeParent parent = getParent();
+		int hash;
+		if (parent != null) {
+			hash = Objects.hash(linkedObject, getName(), getType(), parent.getName(), parent.getType());
+		} else {
+			hash = Objects.hash(linkedObject, getName(), getType(), "", "", "");
+		}
+		return hash;
 	}
 
 }

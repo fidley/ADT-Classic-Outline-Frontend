@@ -6,6 +6,7 @@ import java.util.List;
 import com.sap.adt.tools.abapsource.ui.sources.editors.AbstractAbapSourcePageExtensionProcessor;
 import com.sap.adt.tools.abapsource.ui.sources.editors.IAbapSourcePage;
 
+@SuppressWarnings("restriction")
 public class AbapPageLoadListener extends AbstractAbapSourcePageExtensionProcessor {
 	private static final List<IAbapPageLoadListener> listeners = new ArrayList<>();
 

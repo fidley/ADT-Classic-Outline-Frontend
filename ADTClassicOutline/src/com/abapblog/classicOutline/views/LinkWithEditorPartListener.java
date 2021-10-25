@@ -5,6 +5,9 @@ import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPartReference;
 
+import com.sap.adt.tools.core.ui.editors.IAdtFormEditor;
+
+@SuppressWarnings("restriction")
 public class LinkWithEditorPartListener implements IPartListener2 {
 	private final ILinkedWithEditorView view;
 
@@ -47,6 +50,12 @@ public class LinkWithEditorPartListener implements IPartListener2 {
 	public void partClosed(IWorkbenchPartReference ref) {
 		if (ref instanceof IViewReference) {
 			view.getViewSite().getPage().removePartListener(this);
+		}
+		if (ref.getPart(false) instanceof IEditorPart) {
+			IEditorPart editor = (IEditorPart) ref.getPart(false);
+			if (editor instanceof IAdtFormEditor) {
+				View.destroyLinkedObject((IAdtFormEditor) editor);
+			}
 		}
 
 	}
