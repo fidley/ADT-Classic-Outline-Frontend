@@ -24,6 +24,7 @@ public class TreeContentProvider implements ITreeContentProvider {
 	public TreeContentProvider(LinkedObject linkedObject) {
 		super();
 		this.setLinkedObject(linkedObject);
+
 		// addClassPageListener();
 		// setView(view);
 
@@ -142,14 +143,6 @@ public class TreeContentProvider implements ITreeContentProvider {
 	public void setRefreshTree(boolean refreshTree) {
 		this.refreshTree = refreshTree;
 	}
-//
-//	public View getView() {
-//		return view;
-//	}
-//
-//	public void setView(View view) {
-//		this.view = view;
-//	}
 
 	public LinkedObject getLinkedObject() {
 		return linkedObject;

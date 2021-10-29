@@ -269,9 +269,7 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 			while (linkedObjects.size() > count) {
 				LinkedObject currentlyLinkedObject = linkedObjects.get(count);
 
-				if (currentlyLinkedObject.getName().equals(formEditor.getModel().getName())
-						&& currentlyLinkedObject.getType().equals(formEditor.getModel().getType())
-						&& currentlyLinkedObject.getProject().equals(project)) {
+				if (currentlyLinkedObject.equals(formEditor.getModel(), project)) {
 					linkedObjects.remove(currentlyLinkedObject);
 
 					int countTrees = 0;

@@ -46,7 +46,10 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 	private String getDefinitionURI(TreeNode selectedNode, String uri, IProject project) {
 		if ((selectedNode.getType().equals("OOLD") && !selectedNode.getLinkedObject().getType().contains("CLAS"))
 				|| ((selectedNode.getType().substring(0, 2).equals("OOLD")
-						&& selectedNode.getLinkedObject().getType().contains("REPS")))) {
+						&& (selectedNode.getLinkedObject().getType().contains("REPS")
+								|| selectedNode.getLinkedObject().getType().contains("FUGR/I"))
+
+				))) {
 
 			IAbapNavigationServices navigationService = AbapNavigationServicesFactory.getInstance()
 					.createNavigationService(project.getName());
@@ -71,9 +74,8 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 				AdtNavigationServiceFactory.createNavigationService().canHandleExternalLink(uri);
 				IAdtObjectReference adtObject = navigationService.getNavigationTarget(navigationServiceUri,
 						sourcePage.getSource(), null, prepareFilters());
-
-				adtObject.getUri().getPath();
-				uri = adtObject.getUri().toString();
+				if (adtObject != null)
+					uri = adtObject.getUri().toString();
 
 			} catch (AbapNavigationException e) {
 				// TODO Auto-generated catch block

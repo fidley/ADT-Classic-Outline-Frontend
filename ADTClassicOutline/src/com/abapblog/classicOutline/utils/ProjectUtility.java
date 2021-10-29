@@ -69,15 +69,19 @@ public class ProjectUtility {
 	public static LinkedObject getObjectFromEditor(IEditorPart editor) {
 		if (editor instanceof IAdtFormEditor) {
 			IAdtFormEditor formEditor = (IAdtFormEditor) editor;
-			if (formEditor.getModel() != null) {
+			IAdtObject model = formEditor.getModel();
+			if (model != null) {
+//				List<EditorSource> editorSources = null;
+//				IAdtStructuralInfoService service = AbapSourceUi.getInstance().getOrCreateStructuralInfoService();
+//				IObjectStructureElement objectStructure = service.getOrLoadObjectStructure(formEditor.getModelFile(),
+//						model, editorSources, true, null);
+//				Map attribures = objectStructure.getAttributes();
 				int count = 0;
 				IProject project = getActiveAdtProject();
 				while (View.linkedObjects.size() > count) {
 					LinkedObject currentlyLinkedObject = View.linkedObjects.get(count);
 
-					if (currentlyLinkedObject.getName().equals(formEditor.getModel().getName())
-							&& currentlyLinkedObject.getType().equals(formEditor.getModel().getType())
-							&& currentlyLinkedObject.getProject().equals(project)) {
+					if (currentlyLinkedObject.equals(model, project)) {
 						return currentlyLinkedObject;
 					}
 					count++;

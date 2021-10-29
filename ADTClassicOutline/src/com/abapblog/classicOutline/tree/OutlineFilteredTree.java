@@ -37,6 +37,10 @@ public class OutlineFilteredTree extends FilteredTree {
 		int count = 0;
 		while (linkedObjects.size() > count) {
 			LinkedObject currentlyLinkedObject = linkedObjects.get(count);
+			if (currentlyLinkedObject == null) {
+				count++;
+				continue;
+			}
 			if (!linkedObject.getParentName().equals("")) {
 				if (currentlyLinkedObject.getParentName().equals(linkedObject.getParentName())) {
 					linkedObjects.add(linkedObject);

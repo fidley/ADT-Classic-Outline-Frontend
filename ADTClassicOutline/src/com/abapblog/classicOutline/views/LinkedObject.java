@@ -49,7 +49,7 @@ public class LinkedObject {
 		if (linkedEditor != null) {
 			if (linkedEditor.getModel() != null) {
 				this.type = linkedEditor.getModel().getType();
-				if (this.type.equals("PROG/I") || this.type.equals("FUGR/I")) {
+				if (this.type.equals("PROG/I")) { // || this.type.equals("FUGR/I")) {
 					this.type = "REPS";
 				}
 			}
@@ -78,6 +78,20 @@ public class LinkedObject {
 				&& getProject().equals(comparedObject.getProject()))
 			return true;
 		return false;
+	}
+
+	public boolean equals(IAdtObject adtObject, IProject project) {
+
+		if (adtObject == null)
+			return false;
+
+		if (getName().equals(adtObject.getName()) && (getType().equals(adtObject.getType())
+				|| (getType().equals("REPS") && adtObject.getType().equals("PROG/I"))
+		// || (getType().equals("REPS") && adtObject.getType().equals("FUGR/I"))
+		) && getProject().equals(project))
+			return true;
+		return false;
+
 	}
 
 	public String getParentName() {
