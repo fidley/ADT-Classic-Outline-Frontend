@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 
 import com.abapblog.classicOutline.api.ApiCallerFactory;
+import com.abapblog.classicOutline.views.View;
 import com.sap.adt.tools.abapsource.ui.internal.sources.editors.CompoundTextSelection;
 import com.sap.adt.tools.abapsource.ui.sources.editors.AbapSourcePage;
 import com.sap.adt.tools.core.IAdtObjectReference;
@@ -30,10 +31,14 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 	public void doubleClick(DoubleClickEvent event) {
 		IStructuredSelection thisSelection = (IStructuredSelection) event.getSelection();
 		TreeNode selectedNode = (TreeNode) thisSelection.getFirstElement();
-		String uri = ApiCallerFactory.getCaller().getUriForTreeNode(selectedNode);
+		String uri = "";
+		IProject project = selectedNode.getLinkedObject().getProject();
+		uri = getDefinitionURI(selectedNode, uri, project);
+		if (uri.equals(""))
+			uri = ApiCallerFactory.getCaller().getUriForTreeNode(selectedNode);
+
 		if (uri != null && !uri.isEmpty()) {
-			IProject project = selectedNode.getLinkedObject().getProject();
-			uri = getDefinitionURI(selectedNode, uri, project);
+
 			if (!uri.equals("")) {
 				uri = "adt://" + project.getName() + uri;
 				AdtNavigationServiceFactory.createNavigationService().navigateWithExternalLink(uri, project);
@@ -45,12 +50,25 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 
 	private String getDefinitionURI(TreeNode selectedNode, String uri, IProject project) {
 		if ((selectedNode.getType().equals("OOLD") && !selectedNode.getLinkedObject().getType().contains("CLAS"))
-				|| ((selectedNode.getType().substring(0, 2).equals("OOLD")
-						&& (selectedNode.getLinkedObject().getType().contains("REPS")
-								|| selectedNode.getLinkedObject().getType().contains("FUGR/I"))
+//				&& ((selectedNode.getType().equals("OOLD") && (selectedNode.getLinkedObject().getType().contains("REPS")
+//						|| selectedNode.getLinkedObject().getType().contains("FUGR/I"))
 
-				))) {
-
+//				)
+//			)
+		) {
+			TreeContentProvider contentProvider = (TreeContentProvider) View.getCurrentTree().getViewer()
+					.getContentProvider();
+			ObjectTree objectTree = (ObjectTree) contentProvider.getInvisibleRoot();
+			TreeParent implementationParent = (TreeParent) objectTree
+					.getParentByID(selectedNode.getDefinitionStartId());
+			TreeNode implementationNode = selectedNode;
+			for (TreeNode node : implementationParent.getChildren()) {
+				if (node.getName().equals(selectedNode.getName())) {
+					implementationNode = node;
+					uri = ApiCallerFactory.getCaller().getUriForTreeNode(implementationNode);
+					break;
+				}
+			}
 			IAbapNavigationServices navigationService = AbapNavigationServicesFactory.getInstance()
 					.createNavigationService(project.getName());
 			URI navigationServiceUri = URI.create(uri);
@@ -58,13 +76,14 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 			IAdtFormEditor editor = null;
 			try {
 
-				if (!selectedNode.getSourceNode().getText8().substring(0, 39)
-						.equals(selectedNode.getLinkedObject().getName())) {
+				if (!implementationNode.getSourceNode().getText8().substring(0, 39)
+						.equals(implementationNode.getLinkedObject().getName())) {
 					String includeUri = "adt://" + project.getName() + uri;
+
 					AdtNavigationServiceFactory.createNavigationService().navigateWithExternalLink(includeUri, project);
 					editor = (IAdtFormEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 							.getActiveEditor();
-					navigationServiceUri = getOldStyleURI(navigationServiceUri, editor);
+					navigationServiceUri = getURIWithStartAndEnd(navigationServiceUri, editor);
 
 				}
 				if (editor == null)
@@ -93,7 +112,7 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 		return filterValue;
 	}
 
-	private URI getOldStyleURI(URI navigationServiceUri, IAdtFormEditor editor) {
+	private URI getURIWithStartAndEnd(URI navigationServiceUri, IAdtFormEditor editor) {
 		String includeUri;
 		try {
 			@SuppressWarnings("restriction")

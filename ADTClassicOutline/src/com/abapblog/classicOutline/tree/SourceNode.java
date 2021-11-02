@@ -10,6 +10,7 @@ public class SourceNode {
 	public static String fieldNameText2 = "TEXT2";
 	public static String fieldNameText8 = "TEXT8";
 	public static String fieldNameText9 = "TEXT9";
+	public static String fieldNameNext = "NEXT";
 
 	private String type = "";
 	private String name = "";
@@ -20,6 +21,7 @@ public class SourceNode {
 	private String text2 = "";
 	private String text8 = "";
 	private String text9 = "";
+	private int definitionStartId = 0;
 	private int index;
 
 	public SourceNode(int id) {
@@ -100,6 +102,14 @@ public class SourceNode {
 
 	public int getIndex() {
 		return index;
+	}
+
+	public int getDefinitionStartId() {
+		return definitionStartId;
+	}
+
+	public void setDefinitionStartId(int definitionStartId) {
+		this.definitionStartId = definitionStartId;
 	}
 
 }

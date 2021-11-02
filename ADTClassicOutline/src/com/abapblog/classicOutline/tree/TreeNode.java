@@ -21,6 +21,7 @@ public class TreeNode implements IAdaptable {
 	private String adtUri;
 	private String visibility = "";
 	private SourceNode sourceNode;
+	private int definitionStartId = 0;
 	protected LinkedObject linkedObject;
 
 	public TreeNode(LinkedObject linkedObject, SourceNode sourceNode) {
@@ -31,6 +32,7 @@ public class TreeNode implements IAdaptable {
 			setDescription(sourceNode.getText2());
 			setVisibility(sourceNode.getName());
 			setSourceNode(sourceNode);
+			setDefinitionStartId(sourceNode.getDefinitionStartId());
 
 		} catch (Exception e) {
 			// TODO
@@ -309,6 +311,14 @@ public class TreeNode implements IAdaptable {
 	public String toString() {
 		return getName() + " " + getDescription() + " ";
 
+	}
+
+	public int getDefinitionStartId() {
+		return definitionStartId;
+	}
+
+	public void setDefinitionStartId(int definitionStartId) {
+		this.definitionStartId = definitionStartId;
 	}
 
 }

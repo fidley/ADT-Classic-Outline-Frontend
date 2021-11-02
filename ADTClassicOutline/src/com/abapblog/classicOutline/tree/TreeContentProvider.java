@@ -42,9 +42,9 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object parent) {
-		if (invisibleRoot == null)
+		if (getInvisibleRoot() == null)
 			initialize();
-		return getChildren(invisibleRoot);
+		return getChildren(getInvisibleRoot());
 	}
 
 	@Override
@@ -85,17 +85,17 @@ public class TreeContentProvider implements ITreeContentProvider {
 	}
 
 	public Object[] getElements() {
-		if (invisibleRoot == null)
+		if (getInvisibleRoot() == null)
 			initialize();
-		return getChildren(invisibleRoot);
+		return getChildren(getInvisibleRoot());
 	}
 
 	public Object[] getAllElements() {
 		List<Object> allChildren = new ArrayList<Object>();
-		if (invisibleRoot == null)
+		if (getInvisibleRoot() == null)
 			initialize();
 
-		Object[] childrens = getChildren(invisibleRoot);
+		Object[] childrens = getChildren(getInvisibleRoot());
 		for (int i = 0; i < childrens.length; i++) {
 			try {
 				TreeParent child = (TreeParent) childrens[i];
@@ -150,6 +150,10 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 	public void setLinkedObject(LinkedObject linkedObject) {
 		this.linkedObject = linkedObject;
+	}
+
+	public TreeParent getInvisibleRoot() {
+		return invisibleRoot;
 	}
 
 }

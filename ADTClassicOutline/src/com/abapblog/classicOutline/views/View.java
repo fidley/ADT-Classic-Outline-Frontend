@@ -55,7 +55,7 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 
 	private void getViewerForLinkedObject(Composite parent, LinkedObject linkedObject, boolean refresh) {
 		currentTree = getFilteredTree(parent, linkedObject, refresh);
-		layout.topControl = currentTree;
+		layout.topControl = getCurrentTree();
 		parent.layout();
 	}
 
@@ -192,11 +192,11 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 				return;
 			TreeContentProvider contentProvider = null;
 			try {
-				contentProvider = (TreeContentProvider) currentTree.getViewer().getContentProvider();
+				contentProvider = (TreeContentProvider) getCurrentTree().getViewer().getContentProvider();
 			} catch (Exception e) {
 			}
 
-			if (contentProvider == null || !currentTree.containsObject(linkedObject)) {
+			if (contentProvider == null || !getCurrentTree().containsObject(linkedObject)) {
 
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
@@ -292,5 +292,9 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 			}
 		}
 
+	}
+
+	public static OutlineFilteredTree getCurrentTree() {
+		return currentTree;
 	}
 }

@@ -21,7 +21,7 @@ public class ObjectTree extends TreeParent {
 		return classRoot;
 	}
 
-	private TreeNode getParentByID(int id) {
+	public TreeNode getParentByID(int id) {
 		for (TreeNode node : treeNodes) {
 			if (node.getId() == id)
 				return node;

@@ -3,6 +3,7 @@ package com.abapblog.classicOutline.tree;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
@@ -12,13 +13,14 @@ import com.abapblog.classicOutline.views.LinkedObject;
 
 public class OutlineFilteredTree extends FilteredTree {
 	private final List<LinkedObject> linkedObjects = new ArrayList<>();
-
+	private IProject linkedProject = null;
 	private final TreeExpansionListenerHandler treeExpansionListener = new TreeExpansionListenerHandler();
 
 	public OutlineFilteredTree(Composite parent, int treeStyle, PatternFilter filter, boolean useNewLook,
 			boolean useFastHashLookup, LinkedObject linkdedObject) {
 		super(parent, treeStyle, filter, useNewLook, useFastHashLookup);
 		addLinkedObject(linkdedObject);
+		linkedProject = linkdedObject.getProject();
 		getViewer().addTreeListener(treeExpansionListener);
 	}
 
@@ -31,6 +33,11 @@ public class OutlineFilteredTree extends FilteredTree {
 	}
 
 	public Boolean containsObject(LinkedObject linkedObject) {
+		if (linkedProject != null) {
+			if (!linkedProject.getName().equals(linkedObject.getProject().getName()))
+				return false;
+		}
+
 		if (linkedObjects.contains(linkedObject))
 			return true;
 
