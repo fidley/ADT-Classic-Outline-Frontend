@@ -1,6 +1,10 @@
 package com.abapblog.classicOutline.tree;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 
 import org.eclipse.core.resources.IProject;
@@ -37,25 +41,30 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 		if (uri.equals(""))
 			uri = ApiCallerFactory.getCaller().getUriForTreeNode(selectedNode);
 
-		if (uri != null && !uri.isEmpty()) {
+		if (uri != null && !uri.isEmpty() && !uri.equals("")) {
+			uri = "adt://" + project.getName() + uri;
+			uri = correctUriForNamespaces(uri);
+			AdtNavigationServiceFactory.createNavigationService().navigateWithExternalLink(uri, project);
 
-			if (!uri.equals("")) {
-				uri = "adt://" + project.getName() + uri;
-				AdtNavigationServiceFactory.createNavigationService().navigateWithExternalLink(uri, project);
+		}
+	}
+
+	private String correctUriForNamespaces(String uri) {
+		if (uri.contains("/progpc/") || uri.contains("/progpz/") || uri.contains("/fugrpc/")
+				|| uri.contains("/fugrpz/")) {
+			try {
+				uri = URLDecoder.decode(uri, StandardCharsets.UTF_8.toString());
+				uri = URLEncoder.encode(uri, StandardCharsets.UTF_8.toString());
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
 			}
 
 		}
-
+		return uri;
 	}
 
 	private String getDefinitionURI(TreeNode selectedNode, String uri, IProject project) {
-		if ((selectedNode.getType().equals("OOLD") && !selectedNode.getLinkedObject().getType().contains("CLAS"))
-//				&& ((selectedNode.getType().equals("OOLD") && (selectedNode.getLinkedObject().getType().contains("REPS")
-//						|| selectedNode.getLinkedObject().getType().contains("FUGR/I"))
-
-//				)
-//			)
-		) {
+		if ((selectedNode.getType().equals("OOLD") && !selectedNode.getLinkedObject().getType().contains("CLAS"))) {
 			TreeContentProvider contentProvider = (TreeContentProvider) View.getCurrentTree().getViewer()
 					.getContentProvider();
 			ObjectTree objectTree = (ObjectTree) contentProvider.getInvisibleRoot();
@@ -97,7 +106,6 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 					uri = adtObject.getUri().toString();
 
 			} catch (AbapNavigationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -115,7 +123,6 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 	private URI getURIWithStartAndEnd(URI navigationServiceUri, IAdtFormEditor editor) {
 		String includeUri;
 		try {
-			@SuppressWarnings("restriction")
 			CompoundTextSelection selection = (CompoundTextSelection) PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getActivePage().getSelection();
 
@@ -127,7 +134,6 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 					+ beginningOfName + "%3Bend%3D" + startLine + "%2C" + beginningOfName;
 			navigationServiceUri = URI.create(includeUri);
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return navigationServiceUri;

@@ -1,17 +1,24 @@
 package com.abapblog.classicOutline.views;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
 
+import com.abapblog.classicOutline.api.ApiCallerFactory;
+import com.abapblog.classicOutline.utils.ProjectUtility;
 import com.abapblog.classicOutline.utils.RegularExpressionUtils;
 import com.sap.adt.tools.core.model.adtcore.IAdtObject;
 import com.sap.adt.tools.core.ui.editors.IAdtFormEditor;
 
 @SuppressWarnings("restriction")
 public class LinkedObject {
-	public final static String functionGroupPattern = "functions\\/groups\\/(\\w*)\\/";
+	public final static String functionGroupPattern = "functions\\/groups\\/([^\\/]*)";
+	public final static String functionGroupIncludePattern = "functions\\/groups\\/([^\\/]*)\\/includes";
+	public final static String programIncludesPattern = "programs\\/includes\\/([^\\/]*)";
+	public final static String programsPattern = "programs\\/programs\\/([^\\/]*)";
 	private IAdtFormEditor linkedEditor;
 	private String name;
 	private String type;
@@ -58,6 +65,9 @@ public class LinkedObject {
 	}
 
 	public IProject getProject() {
+		if (project == null) {
+			project = ProjectUtility.getActiveAdtProject();
+		}
 		return project;
 	}
 
@@ -85,10 +95,11 @@ public class LinkedObject {
 		if (adtObject == null)
 			return false;
 
-		if (getName().equals(adtObject.getName()) && (getType().equals(adtObject.getType())
-				|| (getType().equals("REPS") && adtObject.getType().equals("PROG/I"))
-		// || (getType().equals("REPS") && adtObject.getType().equals("FUGR/I"))
-		) && getProject().equals(project))
+		if (getName().equals(adtObject.getName())
+				&& (getType().equals(adtObject.getType())
+						|| (getType().equals("REPS") && adtObject.getType().equals("PROG/I"))
+						|| (getType().equals("CLAS/OC") && adtObject.getType().equals("PROG/I")))
+				&& getProject().equals(project))
 			return true;
 		return false;
 
@@ -99,10 +110,29 @@ public class LinkedObject {
 	}
 
 	private void setParentName() {
+		parentName = "";
 		if (linkedEditor == null)
 			return;
 		String pathString = linkedEditor.getModelFile().getFullPath().toString();
-		parentName = matchPattern(functionGroupPattern, pathString);
+		if (parentName.isEmpty()) {
+			String includeName = matchPattern(programIncludesPattern, pathString);
+			if (!includeName.isEmpty()) {
+				parentName = ApiCallerFactory.getCaller().getMasterProgramForInclude(this);
+			}
+			if (parentName.isEmpty()) {
+				parentName = matchPattern(programsPattern, pathString).toUpperCase();
+			}
+			if (parentName.isEmpty()) {
+				parentName = ApiCallerFactory.getCaller().getMasterProgramForInclude(this);
+			}
+			if (parentName.isEmpty()) {
+				parentName = matchPattern(functionGroupPattern, pathString);
+			}
+			if (parentName.isEmpty()) {
+				parentName = getName();
+			}
+		}
+		parentName = parentName.toUpperCase();
 	}
 
 	private String matchPattern(String pattern, String path) {
@@ -111,9 +141,14 @@ public class LinkedObject {
 
 		Matcher regexPatterMatcher = RegularExpressionUtils.createMatcherWithTimeout(path, regexPattern, 1000);
 		while (regexPatterMatcher.find()) {
-			return regexPatterMatcher.group(1);
+			return URLDecoder.decode(regexPatterMatcher.group(1), StandardCharsets.UTF_8);
 		}
 		return "";
+	}
+
+	public void setType(String masterType) {
+		type = masterType;
+
 	}
 
 }

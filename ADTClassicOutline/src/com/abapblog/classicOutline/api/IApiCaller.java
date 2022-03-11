@@ -17,4 +17,6 @@ public interface IApiCaller {
 
 	public String getUriForTreeNode(TreeNode treeNode);
 
+	public String getMasterProgramForInclude(LinkedObject linkedObject);
+
 }

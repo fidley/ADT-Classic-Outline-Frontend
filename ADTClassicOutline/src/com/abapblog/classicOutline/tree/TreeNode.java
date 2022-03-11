@@ -235,6 +235,7 @@ public class TreeNode implements IAdaptable {
 
 		case "CPL":
 		case "OPL":
+		case "COL":
 		case "OOL":
 		case "OOC":
 		case "COU":

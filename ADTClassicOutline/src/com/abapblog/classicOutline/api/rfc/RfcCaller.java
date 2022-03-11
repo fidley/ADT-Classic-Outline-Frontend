@@ -108,4 +108,36 @@ public class RfcCaller implements IApiCaller {
 		return "";
 	}
 
+	@Override
+	public String getMasterProgramForInclude(LinkedObject linkedObject) {
+		String destinationId = ProjectUtility.getDestinationID(linkedObject.getProject());
+		try {
+			JCoDestination destination = JCoDestinationManager.getDestination(destinationId);
+			JCoFunction function = destination.getRepository().getFunction("Z_ADTCO_GET_INC_MASTER_PROGRAM");
+			if (function == null) {
+				System.out.println("Z_ADTCO_GET_INC_MASTER_PROGRAM not found."
+						+ "This plugin needs a lastest ABAP Backend components that have to be installed in the system in order to use it."
+						+ "Use abapGit to install repository from https://github.com/fidley/ADT-Classic-Outline-Backend");
+				return "";
+			}
+
+			function.getImportParameterList().getField("INCLUDE").setValue(linkedObject.getName());
+			try {
+				function.execute(destination);
+				String masterType = function.getExportParameterList().getString("MASTER_TYPE");
+				if (!masterType.isEmpty()) {
+					linkedObject.setType(masterType);
+				}
+				return function.getExportParameterList().getString("MASTER");
+
+			} catch (AbapException e) {
+				System.out.println(e.toString());
+				return "";
+			}
+		} catch (JCoException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
 }
