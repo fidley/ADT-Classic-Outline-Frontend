@@ -1,11 +1,13 @@
 package com.abapblog.classicOutline.views;
 
+import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 import com.abapblog.classicOutline.api.ApiCallerFactory;
 import com.abapblog.classicOutline.utils.ProjectUtility;
@@ -24,6 +26,7 @@ public class LinkedObject {
 	private String type;
 	private IProject project;
 	private String parentName;
+	private URI parentUri = null;
 
 	public LinkedObject(IAdtFormEditor linkedEditor, IProject project) {
 		this.linkedEditor = linkedEditor;
@@ -68,6 +71,16 @@ public class LinkedObject {
 		if (project == null) {
 			project = ProjectUtility.getActiveAdtProject();
 		}
+		if (project == null) {
+			project = ProjectUtility.getActiveEditor().getAdapter(IProject.class);
+			if (project == null) {
+				IResource resource = ProjectUtility.getActiveEditor().getAdapter(IResource.class);
+				if (resource != null) {
+					project = resource.getProject();
+				}
+			}
+
+		}
 		return project;
 	}
 
@@ -98,7 +111,12 @@ public class LinkedObject {
 		if (getName().equals(adtObject.getName())
 				&& (getType().equals(adtObject.getType())
 						|| (getType().equals("REPS") && adtObject.getType().equals("PROG/I"))
-						|| (getType().equals("CLAS/OC") && adtObject.getType().equals("PROG/I")))
+						|| (getType().equals("CLAS/OC") && adtObject.getType().equals("PROG/I"))
+						|| (getType().equals("REPS") && adtObject.getType().equals("FUGR/I"))
+						|| (getType().equals("PROG/I") && adtObject.getType().equals("FUGR/I"))
+						|| (getType().equals("FUGR/I") && adtObject.getType().equals("PROG/I"))
+						|| (getType().equals("FUGR/I") && adtObject.getType().equals("REPS"))
+						|| (getType().equals("PROG/I") && adtObject.getType().equals("REPS")))
 				&& getProject().equals(project))
 			return true;
 		return false;
@@ -118,18 +136,38 @@ public class LinkedObject {
 			String includeName = matchPattern(programIncludesPattern, pathString);
 			if (!includeName.isEmpty()) {
 				parentName = ApiCallerFactory.getCaller().getMasterProgramForInclude(this);
+				if (!parentName.isEmpty())
+					setParentUri(URI.create("/sap/bc/adt/programs/programs/" + parentName));
 			}
 			if (parentName.isEmpty()) {
 				parentName = matchPattern(programsPattern, pathString).toUpperCase();
+				if (!parentName.isEmpty())
+					setParentUri(URI.create("/sap/bc/adt/programs/programs/" + parentName));
 			}
 			if (parentName.isEmpty()) {
 				parentName = ApiCallerFactory.getCaller().getMasterProgramForInclude(this);
 			}
 			if (parentName.isEmpty()) {
 				parentName = matchPattern(functionGroupPattern, pathString);
+				if (!parentName.isEmpty())
+					setParentUri(URI.create("/sap/bc/adt/functions/groups/" + parentName));
 			}
 			if (parentName.isEmpty()) {
 				parentName = getName();
+				switch (getType()) {
+				case "PROG/P": {
+					setParentUri(URI.create("/sap/bc/adt/programs/programs/" + parentName));
+					break;
+				}
+				case "INTF/OI": {
+					setParentUri(URI.create("/sap/bc/adt/oo/interfaces/" + parentName));
+					break;
+				}
+				case "CLAS/OC": {
+					setParentUri(URI.create("/sap/bc/adt/oo/classes/" + parentName));
+					break;
+				}
+				}
 			}
 		}
 		parentName = parentName.toUpperCase();
@@ -149,6 +187,14 @@ public class LinkedObject {
 	public void setType(String masterType) {
 		type = masterType;
 
+	}
+
+	public URI getParentUri() {
+		return parentUri;
+	}
+
+	private void setParentUri(URI parentUri) {
+		this.parentUri = parentUri;
 	}
 
 }

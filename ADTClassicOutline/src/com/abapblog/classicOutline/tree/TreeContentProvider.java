@@ -24,10 +24,6 @@ public class TreeContentProvider implements ITreeContentProvider {
 	public TreeContentProvider(LinkedObject linkedObject) {
 		super();
 		this.setLinkedObject(linkedObject);
-
-		// addClassPageListener();
-		// setView(view);
-
 	}
 
 	private void addClassPageListener() {

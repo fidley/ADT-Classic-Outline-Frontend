@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
@@ -11,6 +12,7 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
@@ -55,7 +57,7 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 
 	private void getViewerForLinkedObject(Composite parent, LinkedObject linkedObject, boolean refresh) {
 		currentTree = getFilteredTree(parent, linkedObject, refresh);
-		layout.topControl = getCurrentTree();
+		layout.topControl = currentTree;
 		parent.layout();
 	}
 
@@ -65,7 +67,7 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 		while (filteredTrees.size() > count) {
 			OutlineFilteredTree filteredTree = filteredTrees.get(count);
 			if (linkedObject != null && filteredTree.containsObject(linkedObject)) {
-				if (refresh == true) {
+				if (refresh) {
 					TreeViewer viewer = filteredTree.getViewer();
 					Object[] expandedNodes = viewer.getExpandedElements();
 					TreeContentProvider contentProvider = new TreeContentProvider(linkedObject);
@@ -76,7 +78,8 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 						viewer.expandAll();
 					} else {
 						if (expandedNodes != null && expandedNodes.length > 0) {
-							setExpandedElements(expandedNodes, contentProvider, viewer);
+							if (Boolean.FALSE.equals(setExpandedElements(expandedNodes, contentProvider, viewer)))
+								viewer.expandToLevel(2);
 						} else {
 							viewer.expandToLevel(2);
 						}
@@ -91,7 +94,9 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 
 	}
 
-	private void setExpandedElements(Object[] elementToExpand, TreeContentProvider contentProvider, TreeViewer viewer) {
+	private Boolean setExpandedElements(Object[] elementToExpand, TreeContentProvider contentProvider,
+			TreeViewer viewer) {
+		Boolean found = false;
 		List<Object> toExpand = new ArrayList<Object>();
 		Object[] currentNodes = contentProvider.getAllElements();
 		for (int i = 0; i < elementToExpand.length; i++) {
@@ -110,7 +115,9 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 		}
 		if (toExpand.size() > 0) {
 			viewer.setExpandedElements(toExpand.toArray());
+			found = true;
 		}
+		return found;
 	}
 
 	private OutlineFilteredTree getNewFilteredTree(Composite parent, LinkedObject linkedObject) {
@@ -134,6 +141,16 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 		createGridData(viewer);
 		viewer.addDoubleClickListener(new TreeDoubleClickListener());
 		viewer.expandToLevel(2);
+		createAndRegisterMenu(viewer);
+
+	}
+
+	private void createAndRegisterMenu(TreeViewer viewer) {
+		MenuManager menuManager = new MenuManager();
+		Menu menu = menuManager.createContextMenu(viewer.getTree());
+		viewer.getTree().setMenu(menu);
+		getSite().registerContextMenu(menuManager, viewer);
+		getSite().setSelectionProvider(viewer);
 	}
 
 	private void setTreeProperties(Tree tree) {

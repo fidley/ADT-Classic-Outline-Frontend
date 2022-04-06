@@ -30,10 +30,14 @@ Require-Bundle: org.eclipse.ui,
  com.sap.adt.ris.search,
  com.sap.adt.activation.ui,
  org.eclipse.jface.text;bundle-version="3.18.100",
- com.sap.adt.tools.abapsource
+ com.sap.adt.tools.abapsource,
+ com.sap.adt.atc.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8,
  JavaSE-15
 Automatic-Module-Name: com.abapblog.classicOutline
 Bundle-ActivationPolicy: lazy
-Import-Package: com.sap.adt.sapgui.ui.editors,
+Import-Package: com.sap.adt.atc,
+ com.sap.adt.atc.internal,
+ com.sap.adt.atc.ui,
+ com.sap.adt.sapgui.ui.editors,
  org.eclipse.draw2d

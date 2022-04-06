@@ -38,4 +38,40 @@
             class="com.abapblog.classicOutline.views.ActivationSuccessListenerHandler">
       </onActivationSuccess>
    </extension>
+      <extension
+            point="org.eclipse.ui.menus">
+         <menuContribution
+               allPopups="false"
+               locationURI="toolbar:com.abapblog.classicOutline.view">
+            <command
+                  commandId="com.abapblog.classicOutline.RefreshView"
+                  icon="platform:/plugin/org.eclipse.ui.browser/icons/clcl16/nav_refresh.png"
+                  label="Refresh"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.abapblog.classicOutline.view">
+            <command
+                  commandId="com.abapblog.classicOutline.RunATC"
+                  icon="platform:/plugin/org.eclipse.ant.ui/icons/full/elcl16/run_tool.png"
+                  label="Run ATC"
+                  style="push">
+            </command>
+         </menuContribution>
+      </extension>
+      <extension
+            point="org.eclipse.ui.commands">
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.RefreshViewHandler"
+               id="com.abapblog.classicOutline.RefreshView"
+               name="Force tree refresh">
+         </command>
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.RunATC"
+               id="com.abapblog.classicOutline.RunATC"
+               name="Run ATC">
+         </command>
+      </extension>
 </plugin>

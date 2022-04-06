@@ -124,10 +124,10 @@ public class RfcCaller implements IApiCaller {
 			function.getImportParameterList().getField("INCLUDE").setValue(linkedObject.getName());
 			try {
 				function.execute(destination);
-				String masterType = function.getExportParameterList().getString("MASTER_TYPE");
-				if (!masterType.isEmpty()) {
-					linkedObject.setType(masterType);
-				}
+//				String masterType = function.getExportParameterList().getString("MASTER_TYPE");
+////				if (!masterType.isEmpty()) {
+////					linkedObject.setType(masterType);
+////				}
 				return function.getExportParameterList().getString("MASTER");
 
 			} catch (AbapException e) {

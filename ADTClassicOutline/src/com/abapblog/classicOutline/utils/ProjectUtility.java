@@ -52,8 +52,8 @@ public class ProjectUtility {
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IWorkbenchWindow window = page.getWorkbenchWindow();
 			ISelection adtSelection = window.getSelectionService().getSelection();
-			IProject project = ProjectUtil.getActiveAdtCoreProject(adtSelection, null, null,
-					IAdtCoreProject.ABAP_PROJECT_NATURE);
+			IProject project = ProjectUtil.getActiveAdtCoreProject(adtSelection, null, null, null);
+//					IAdtCoreProject.ABAP_PROJECT_NATURE);
 			return project;
 		} catch (Exception e) {
 			return null;

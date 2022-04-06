@@ -8,6 +8,7 @@ public class AbapPageLoadListenerHandler implements IAbapPageLoadListener {
 	@Override
 	public void pageLoaded(IAbapSourcePage sourcePage) {
 		View.view.reloadOutlineContent(true, true, false);
+		AbapPageLoadListener.removeListener(this);
 	}
 
 }
