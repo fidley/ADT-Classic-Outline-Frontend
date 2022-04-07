@@ -50,16 +50,6 @@
                   style="push">
             </command>
          </menuContribution>
-         <menuContribution
-               allPopups="false"
-               locationURI="popup:com.abapblog.classicOutline.view">
-            <command
-                  commandId="com.abapblog.classicOutline.RunATC"
-                  icon="platform:/plugin/org.eclipse.ant.ui/icons/full/elcl16/run_tool.png"
-                  label="Run ATC"
-                  style="push">
-            </command>
-         </menuContribution>
       </extension>
       <extension
             point="org.eclipse.ui.commands">

@@ -17,7 +17,7 @@ public class LogonListenerHandler implements ILogonListener {
 		if (destinationListenerInfo.indexOf(destId) == -1) {
 			System.out.println("LoggedOnEvent: " + destId);
 			destinationListenerInfo.add(destId);
-			AbapPageLoadListener.addListener(new AbapPageLoadListenerHandler());
+			AbapPageLoadListener.addListener(new AbapPageLoadListenerHandler(destId));
 		}
 
 	}

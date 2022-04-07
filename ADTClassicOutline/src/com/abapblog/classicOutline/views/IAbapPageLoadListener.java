@@ -6,4 +6,6 @@ import com.sap.adt.tools.abapsource.ui.sources.editors.IAbapSourcePage;
 public interface IAbapPageLoadListener {
 	void pageLoaded(IAbapSourcePage sourcePage);
 
+	String getDestinationId();
+
 }

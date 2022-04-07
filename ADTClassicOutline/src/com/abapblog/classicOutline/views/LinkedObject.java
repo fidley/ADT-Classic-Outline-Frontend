@@ -26,6 +26,7 @@ public class LinkedObject {
 	private String type;
 	private IProject project;
 	private String parentName;
+	private String parentType;
 	private URI parentUri = null;
 
 	public LinkedObject(IAdtFormEditor linkedEditor, IProject project) {
@@ -129,6 +130,7 @@ public class LinkedObject {
 
 	private void setParentName() {
 		parentName = "";
+		parentType = getType();
 		if (linkedEditor == null)
 			return;
 		String pathString = linkedEditor.getModelFile().getFullPath().toString();
@@ -149,11 +151,14 @@ public class LinkedObject {
 			}
 			if (parentName.isEmpty()) {
 				parentName = matchPattern(functionGroupPattern, pathString);
-				if (!parentName.isEmpty())
+				if (!parentName.isEmpty()) {
 					setParentUri(URI.create("/sap/bc/adt/functions/groups/" + parentName));
+					parentType = "FUGR/F";
+				}
 			}
 			if (parentName.isEmpty()) {
 				parentName = getName();
+				parentType = getType();
 				switch (getType()) {
 				case "PROG/P": {
 					setParentUri(URI.create("/sap/bc/adt/programs/programs/" + parentName));
@@ -195,6 +200,14 @@ public class LinkedObject {
 
 	private void setParentUri(URI parentUri) {
 		this.parentUri = parentUri;
+	}
+
+	public String getParentType() {
+		return parentType;
+	}
+
+	public void setParentType(String parentType) {
+		this.parentType = parentType;
 	}
 
 }

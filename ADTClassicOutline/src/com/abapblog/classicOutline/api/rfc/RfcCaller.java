@@ -44,8 +44,8 @@ public class RfcCaller implements IApiCaller {
 				newObjectTree.addChild(sourceNode);
 				return newObjectTree;
 			}
-			function.getImportParameterList().getField("OBJECT_NAME").setValue(linkedObject.getName());
-			function.getImportParameterList().getField("OBJECT_TYPE").setValue(linkedObject.getType());
+			function.getImportParameterList().getField("OBJECT_NAME").setValue(linkedObject.getParentName());
+			function.getImportParameterList().getField("OBJECT_TYPE").setValue(linkedObject.getParentType());
 			try {
 				function.execute(destination);
 				JCoTable objectTree = function.getExportParameterList().getTable("TREE");
@@ -89,8 +89,8 @@ public class RfcCaller implements IApiCaller {
 						+ "This plugin needs a ABAP Backend components that have to be installed in the system in order to use it."
 						+ "Use abapGit to install repository from https://github.com/fidley/ADT-Classic-Outline-Backend");
 
-			function.getImportParameterList().getField("OBJECT_NAME").setValue(linkedObject.getName());
-			function.getImportParameterList().getField("OBJECT_TYPE").setValue(linkedObject.getType());
+			function.getImportParameterList().getField("OBJECT_NAME").setValue(linkedObject.getParentName());
+			function.getImportParameterList().getField("OBJECT_TYPE").setValue(linkedObject.getParentType());
 			RfcObjectNodeContentHandler.serialize(treeNode.getSourceNode(),
 					function.getImportParameterList().getStructure("NODE"));
 
@@ -124,10 +124,10 @@ public class RfcCaller implements IApiCaller {
 			function.getImportParameterList().getField("INCLUDE").setValue(linkedObject.getName());
 			try {
 				function.execute(destination);
-//				String masterType = function.getExportParameterList().getString("MASTER_TYPE");
-////				if (!masterType.isEmpty()) {
-////					linkedObject.setType(masterType);
-////				}
+				String masterType = function.getExportParameterList().getString("MASTER_TYPE");
+				if (!masterType.isEmpty()) {
+					linkedObject.setParentType(masterType);
+				}
 				return function.getExportParameterList().getString("MASTER");
 
 			} catch (AbapException e) {
