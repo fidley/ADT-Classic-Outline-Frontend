@@ -5,6 +5,9 @@ This repository accompanies [*ABAP in Eclipse*](https://www.apress.com/978148426
 [comment]: #cover
 ![Cover image](9781484269626.jpg)
 
+# Eclipse Marketplace Stats
+![Eclipse Marketplace](https://img.shields.io/eclipse-marketplace/favorites/adt-classic-outline)
+![Downloads](https://img.shields.io/eclipse-marketplace/dt/adt-classic-outline)
 
 # Installation 
 
