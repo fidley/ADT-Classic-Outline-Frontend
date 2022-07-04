@@ -18,8 +18,10 @@ import com.sap.adt.atc.AtcRunOptions;
 import com.sap.adt.atc.AtcRunnerFactory;
 import com.sap.adt.atc.IAtcResult;
 import com.sap.adt.atc.IAtcRunner;
+import com.sap.adt.atc.ui.AtcWorklistProvider;
 import com.sap.adt.tools.abapsource.common.IRestResourceFactoryFacade;
 import com.sap.adt.tools.abapsource.common.RestResourceFactoryFacade;
+import com.sap.adt.tools.core.project.IAbapProject;
 
 @SuppressWarnings("restriction")
 public class RunATC implements IHandler {
@@ -53,8 +55,28 @@ public class RunATC implements IHandler {
 			if (linkedObject.getParentUri() != null) {
 				uri.add(linkedObject.getParentUri());
 				AtcRunOptions atcOptions = new AtcRunOptions();
-//				atcOptions.setCheckVariantName("ZHAGER_DEFAULT_REMOTE");
+//				atcOptions.setCheckVariantName("Z*");
 				IAtcResult results = atcRunner.checkItemsAtBackend(uri, atcOptions);
+				final IAbapProject abapProject = (IAbapProject) linkedObject.getProject();
+				final AtcWorklistProvider worklistProvider = new AtcWorklistProvider(abapProject);
+				worklistProvider.setCheckvariant(atcOptions.getCheckVariantName());
+				/*
+				 * AtcResultConfigureTreeDialogStoreModel atcResultConfigureTreeDialogStoreModel
+				 * = this.resultBrowser.selectedUIPreferences
+				 * .get(abapProject.getProject().getName()); final Optional<String>
+				 * contactPerson = resultBrowserFile.getCategory().equals(ResultCategory.LOCAL)
+				 * ? Optional.<String>of(atcResultConfigureTreeDialogStoreModel.
+				 * getContactPersonLocal()) :
+				 * Optional.<String>of(atcResultConfigureTreeDialogStoreModel.
+				 * getContactPersonGlobal()); final String worklistId =
+				 * worklistProvider.getOrCreateWorklistId(); final String displayId =
+				 * resultBrowserFile.getDisplayId(); Job job = new
+				 * Job(Messages.AtcResultBrowserDisplayingResultInAtcProblemsView_xmsg) {
+				 * protected IStatus run(IProgressMonitor monitor) {
+				 * AtcBackendServices.getAtcResultWorklistAccess().addResultToWorklist(null,
+				 * abapProject, worklistId, displayId, contactPerson.orElse(""));
+				 * worklistProvider.startGetWorklistJob(worklistId); return Status.OK_STATUS; }
+				 */
 				/*
 				 * try {
 				 * AtcDisplayController.getInstance().showResult(linkedObject.getProject(),

@@ -50,8 +50,8 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 	}
 
 	private String correctUriForNamespaces(String uri) {
-		if (uri.contains("/progpc/") || uri.contains("/progpz/") || uri.contains("/fugrpc/")
-				|| uri.contains("/fugrpz/")) {
+		if (uri.contains("/progpc/") || uri.contains("/progpz/") || uri.contains("/fugrpc/") || uri.contains("/fugrpz/")
+				|| uri.contains("/fugrps/") || uri.contains("/progps/")) {
 			try {
 				uri = URLDecoder.decode(uri, StandardCharsets.UTF_8.toString());
 				uri = URLEncoder.encode(uri, StandardCharsets.UTF_8.toString());
