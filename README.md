@@ -12,5 +12,5 @@ This repository accompanies [*ABAP in Eclipse*](https://www.apress.com/978148426
 # Installation 
 
 1. Use abapGit and clone the repository https://github.com/fidley/ADT-Classic-Outline-Backend/ to your system
-2. Install ADT Classic Outline from http://abapblog.com/eclipse/plugin/ABAPFavorites/ by using install new software function in Eclipse 
+2. Install ADT Classic Outline from https://fidley.github.io/ADTPluginsUpdateSite/UpdateSite/ by using install new software function in Eclipse 
 (soon also on Eclipse Marketplace)
