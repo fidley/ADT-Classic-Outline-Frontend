@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.ui.IEditorPart;
 
 import com.abapblog.classicOutline.api.ApiCallerFactory;
+import com.abapblog.classicOutline.tree.listeners.ITreeContentRefreshListener;
 import com.abapblog.classicOutline.utils.ClassPageChangeListener;
 import com.abapblog.classicOutline.utils.ProjectUtility;
 import com.abapblog.classicOutline.views.LinkedObject;
@@ -19,11 +20,16 @@ public class TreeContentProvider implements ITreeContentProvider {
 	private Object[] elements;
 	private boolean refreshTree = false;
 	private org.eclipse.jface.viewers.TreePath[] treePaths;
-	// private View view;
+	private List<ITreeContentRefreshListener> eventListeners;
+	private OutlineFilteredTree filteredTree;
+	private Object[] expandedNodes;
 
-	public TreeContentProvider(LinkedObject linkedObject) {
+	public TreeContentProvider(LinkedObject linkedObject, OutlineFilteredTree filteredTree, Object[] expandedNodes) {
 		super();
 		this.setLinkedObject(linkedObject);
+		this.filteredTree = filteredTree;
+		this.expandedNodes = expandedNodes;
+		this.eventListeners = new ArrayList<ITreeContentRefreshListener>();
 	}
 
 	private void addClassPageListener() {
@@ -74,10 +80,20 @@ public class TreeContentProvider implements ITreeContentProvider {
 			invisibleRoot = new TreeParent(getLinkedObject(), null);
 			if (getLinkedObject() == null || getLinkedObject().isEmpty())
 				return;
-			invisibleRoot = ApiCallerFactory.getCaller().getObjectTree(getLinkedObject(), refresh);
+			TreeContentProvider contentProvider = this;
+			Thread thread = new Thread("GetClassicOutlineViewer") {
+				@Override
+				public void run() {
+					invisibleRoot = ApiCallerFactory.getCaller().getObjectTree(getLinkedObject(), refresh);
+					eventListeners.forEach((el) -> el.ContentRefreshed(contentProvider));
+				}
+			};
+			thread.start();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public Object[] getElements() {
@@ -152,4 +168,15 @@ public class TreeContentProvider implements ITreeContentProvider {
 		return invisibleRoot;
 	}
 
+	public OutlineFilteredTree getFilteredTree() {
+		return filteredTree;
+	}
+
+	public Object[] getExpandedNodes() {
+		return expandedNodes;
+	}
+
+	public void addContentRefreshListener(ITreeContentRefreshListener evtListener) {
+		this.eventListeners.add(evtListener);
+	}
 }

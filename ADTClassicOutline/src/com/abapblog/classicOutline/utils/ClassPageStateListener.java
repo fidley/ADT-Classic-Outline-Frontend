@@ -1,5 +1,6 @@
 package com.abapblog.classicOutline.utils;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.texteditor.IElementStateListener;
 
@@ -18,10 +19,14 @@ public class ClassPageStateListener implements IElementStateListener {
 	@Override
 	public void elementDirtyStateChanged(Object element, boolean isDirty) {
 		if (!isDirty && getInput().equals(element)) {
-			contentProvider.setRefreshTree(true);
-			contentProvider.initialize();
-			// contentProvider.getView().treeViewerRefresh();
-			// contentProvider.getView().getViewer().expandToLevel(2);
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					contentProvider.setRefreshTree(true);
+					contentProvider.initialize();
+				}
+			});
+
 		}
 	}
 

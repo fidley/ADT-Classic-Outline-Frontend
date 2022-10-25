@@ -24,11 +24,12 @@ import com.abapblog.classicOutline.tree.TreeContentProvider;
 import com.abapblog.classicOutline.tree.TreeDoubleClickListener;
 import com.abapblog.classicOutline.tree.TreeParent;
 import com.abapblog.classicOutline.tree.TreePatternFilter;
+import com.abapblog.classicOutline.tree.listeners.ITreeContentRefreshListener;
 import com.abapblog.classicOutline.utils.ProjectUtility;
 import com.sap.adt.tools.core.ui.editors.IAdtFormEditor;
 
 @SuppressWarnings("restriction")
-public class View extends ViewPart implements ILinkedWithEditorView {
+public class View extends ViewPart implements ILinkedWithEditorView, ITreeContentRefreshListener {
 	private Composite parent;
 	private static OutlineFilteredTree currentTree;
 	public static List<LinkedObject> linkedObjects = new ArrayList<>();
@@ -52,10 +53,10 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 		linkedObject = ProjectUtility.getObjectFromEditor();
 		if (linkedObject != null)
 			reloadOutlineContent(false, false, true);
-
 	}
 
 	private void getViewerForLinkedObject(Composite parent, LinkedObject linkedObject, boolean refresh) {
+
 		currentTree = getFilteredTree(parent, linkedObject, refresh);
 		layout.topControl = currentTree;
 		parent.layout();
@@ -70,20 +71,12 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 				if (refresh) {
 					TreeViewer viewer = filteredTree.getViewer();
 					Object[] expandedNodes = viewer.getExpandedElements();
-					TreeContentProvider contentProvider = new TreeContentProvider(linkedObject);
+					TreeContentProvider contentProvider = new TreeContentProvider(linkedObject, filteredTree,
+							expandedNodes);
+					contentProvider.addContentRefreshListener(this);
 					contentProvider.setRefreshTree(true);
 					contentProvider.initialize();
 					viewer.setContentProvider(contentProvider);
-					if (filteredTree.getFilterControl().getText() != "") {
-						viewer.expandAll();
-					} else {
-						if (expandedNodes != null && expandedNodes.length > 0) {
-							if (Boolean.FALSE.equals(setExpandedElements(expandedNodes, contentProvider, viewer)))
-								viewer.expandToLevel(2);
-						} else {
-							viewer.expandToLevel(2);
-						}
-					}
 				}
 				return filteredTree;
 			}
@@ -97,6 +90,8 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 	private Boolean setExpandedElements(Object[] elementToExpand, TreeContentProvider contentProvider,
 			TreeViewer viewer) {
 		Boolean found = false;
+		if (elementToExpand == null)
+			return found;
 		List<Object> toExpand = new ArrayList<Object>();
 		Object[] currentNodes = contentProvider.getAllElements();
 		for (int i = 0; i < elementToExpand.length; i++) {
@@ -131,8 +126,8 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 
 	private void prepareTree(LinkedObject linkedObject, OutlineFilteredTree filteredTree) {
 		TreeViewer viewer = filteredTree.getViewer();
-		TreeContentProvider contentProvider = new TreeContentProvider(linkedObject);
-
+		TreeContentProvider contentProvider = new TreeContentProvider(linkedObject, filteredTree, null);
+		contentProvider.addContentRefreshListener(this);
 		contentProvider.initialize();
 		viewer.setContentProvider(contentProvider);
 		setTreeProperties(viewer.getTree());
@@ -142,7 +137,6 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 		viewer.addDoubleClickListener(new TreeDoubleClickListener());
 		viewer.expandToLevel(2);
 		createAndRegisterMenu(viewer);
-
 	}
 
 	private void createAndRegisterMenu(TreeViewer viewer) {
@@ -215,20 +209,10 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 
 			if (contentProvider == null || !getCurrentTree().containsObject(linkedObject)) {
 
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						try {
-
-							getViewerForLinkedObject(container, linkedObject, false);
-
-						} catch (Exception e) {
-						}
-					}
-				});
+				getViewerForLinkedObject(container, linkedObject, false);
 			}
+			;
 		}
-
 	}
 
 	@Override
@@ -314,4 +298,29 @@ public class View extends ViewPart implements ILinkedWithEditorView {
 	public static OutlineFilteredTree getCurrentTree() {
 		return currentTree;
 	}
+
+	@Override
+	public void ContentRefreshed(TreeContentProvider contentProvider) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				OutlineFilteredTree filteredTree = contentProvider.getFilteredTree();
+				TreeViewer viewer = contentProvider.getFilteredTree().getViewer();
+				Object[] expandedNodes = contentProvider.getExpandedNodes();
+				viewer.setContentProvider(contentProvider);
+				if (filteredTree.getFilterControl().getText() != "") {
+					viewer.expandAll();
+				} else {
+					if (expandedNodes != null && expandedNodes.length > 0) {
+						if (Boolean.FALSE.equals(setExpandedElements(expandedNodes, contentProvider, viewer)))
+							viewer.expandToLevel(2);
+					} else {
+						viewer.expandToLevel(2);
+					}
+				}
+
+			}
+		});
+	}
+
 }
