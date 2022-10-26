@@ -80,6 +80,7 @@ public class TreeContentProvider implements ITreeContentProvider {
 			invisibleRoot = new TreeParent(getLinkedObject(), null);
 			if (getLinkedObject() == null || getLinkedObject().isEmpty())
 				return;
+			invisibleRoot.addChild(new TreeNode(getLinkedObject(), getLoadingChild()));
 			TreeContentProvider contentProvider = this;
 			Thread thread = new Thread("GetClassicOutlineViewer") {
 				@Override
@@ -94,6 +95,14 @@ public class TreeContentProvider implements ITreeContentProvider {
 			e.printStackTrace();
 		}
 
+	}
+
+	private SourceNode getLoadingChild() {
+		SourceNode loading = new SourceNode(0);
+		loading.setText1("Loading...");
+		loading.setText2("data from backend");
+		loading.setType("LOAD");
+		return loading;
 	}
 
 	public Object[] getElements() {
