@@ -44,7 +44,11 @@ public class TreeDoubleClickListener implements IDoubleClickListener {
 		if (uri != null && !uri.isEmpty() && !uri.equals("")) {
 			uri = "adt://" + project.getName() + uri;
 			uri = correctUriForNamespaces(uri);
-			AdtNavigationServiceFactory.createNavigationService().navigateWithExternalLink(uri, project);
+			try {
+				AdtNavigationServiceFactory.createNavigationService().navigateWithExternalLink(uri, project);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
 
 		}
 	}
