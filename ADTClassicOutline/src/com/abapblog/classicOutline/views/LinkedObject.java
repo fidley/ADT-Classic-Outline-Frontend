@@ -42,8 +42,8 @@ public class LinkedObject {
 	}
 
 	private void setName() {
-		if (linkedEditor != null) {
-			IAdtObject model = linkedEditor.getModel();
+		if (getLinkedEditor() != null) {
+			IAdtObject model = getLinkedEditor().getModel();
 			if (model != null) {
 				this.name = model.getName();
 			}
@@ -57,9 +57,9 @@ public class LinkedObject {
 	}
 
 	private void setType() {
-		if (linkedEditor != null) {
-			if (linkedEditor.getModel() != null) {
-				this.type = linkedEditor.getModel().getType();
+		if (getLinkedEditor() != null) {
+			if (getLinkedEditor().getModel() != null) {
+				this.type = getLinkedEditor().getModel().getType();
 				if (this.type.equals("PROG/I")) { // || this.type.equals("FUGR/I")) {
 					this.type = "REPS";
 				}
@@ -131,9 +131,9 @@ public class LinkedObject {
 	private void setParentName() {
 		parentName = "";
 		parentType = getType();
-		if (linkedEditor == null)
+		if (getLinkedEditor() == null)
 			return;
-		String pathString = linkedEditor.getModelFile().getFullPath().toString();
+		String pathString = getLinkedEditor().getModelFile().getFullPath().toString();
 		if (parentName.isEmpty()) {
 			String includeName = matchPattern(programIncludesPattern, pathString);
 			if (!includeName.isEmpty()) {
@@ -208,6 +208,10 @@ public class LinkedObject {
 
 	public void setParentType(String parentType) {
 		this.parentType = parentType;
+	}
+
+	public IAdtFormEditor getLinkedEditor() {
+		return linkedEditor;
 	}
 
 }

@@ -23,6 +23,22 @@ public class RfcObjectTreeContentHandler {
 			sourceNode.setText2(rfcTable.getString(SourceNode.fieldNameText2));
 			sourceNode.setText8(rfcTable.getString(SourceNode.fieldNameText8));
 			sourceNode.setText9(rfcTable.getString(SourceNode.fieldNameText9));
+			sourceNode.setKind5(rfcTable.getInt(SourceNode.fieldNameKind5));
+			try {
+				sourceNode.setKind4(Integer.parseInt(rfcTable.getString(SourceNode.fieldNameKind4)));
+			} catch (NumberFormatException e) {
+
+			}
+
+			sourceNode.setKind6(rfcTable.getString(SourceNode.fieldNameKind6).equals("X"));
+			sourceNode.setKind7(rfcTable.getString(SourceNode.fieldNameKind7).equals("X"));
+			sourceNode.setKind8(rfcTable.getString(SourceNode.fieldNameKind8).equals("X"));
+			sourceNode.setKind3(rfcTable.getString(SourceNode.fieldNameKind3).equals("X"));
+			try {
+				sourceNode.setKind9(Integer.parseInt(rfcTable.getString(SourceNode.fieldNameKind9)));
+			} catch (NumberFormatException e) {
+
+			}
 			sourceNode.setIndex(i);
 			if (sourceNode.getType().equals("COLD")) {
 				definitionStartId = rfcTable.getInt(SourceNode.fieldNameNext);

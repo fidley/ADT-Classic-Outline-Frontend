@@ -11,6 +11,13 @@ public class SourceNode {
 	public static String fieldNameText8 = "TEXT8";
 	public static String fieldNameText9 = "TEXT9";
 	public static String fieldNameNext = "NEXT";
+	public static String fieldNameKind5 = "KIND5";
+	public static String fieldNameKind6 = "KIND6";
+	public static String fieldNameKind7 = "KIND7";
+	public static String fieldNameKind8 = "KIND8";
+	public static String fieldNameKind9 = "KIND9";
+	public static String fieldNameKind4 = "KIND4";
+	public static String fieldNameKind3 = "KIND3";
 
 	private String type = "";
 	private String name = "";
@@ -23,6 +30,13 @@ public class SourceNode {
 	private String text9 = "";
 	private int definitionStartId = 0;
 	private int index;
+	private int kind5 = 0;
+	private Boolean kind6 = false;
+	private Boolean kind7 = false;
+	private Boolean kind8 = false;
+	private int kind9 = 0;
+	private int kind4 = 9999;
+	private Boolean kind3 = false;
 
 	public SourceNode(int id) {
 		this.id = id;
@@ -110,6 +124,62 @@ public class SourceNode {
 
 	public void setDefinitionStartId(int definitionStartId) {
 		this.definitionStartId = definitionStartId;
+	}
+
+	public Boolean getKind8() {
+		return kind8;
+	}
+
+	public int getKind9() {
+		return kind9;
+	}
+
+	public Boolean getKind6() {
+		return kind6;
+	}
+
+	public Boolean getKind7() {
+		return kind7;
+	}
+
+	public void setKind6(Boolean kind6) {
+		this.kind6 = kind6;
+	}
+
+	public void setKind7(Boolean kind7) {
+		this.kind7 = kind7;
+	}
+
+	public void setKind8(Boolean kind8) {
+		this.kind8 = kind8;
+	}
+
+	public void setKind9(int kind9) {
+		this.kind9 = kind9;
+	}
+
+	public int getKind5() {
+		return kind5;
+	}
+
+	public void setKind5(int kind5) {
+		this.kind5 = kind5;
+	}
+
+	public int getKind4() {
+		return kind4;
+	}
+
+	public void setKind4(int kind4) {
+		this.kind4 = kind4;
+	}
+
+	public Boolean getKind3() {
+		return kind3;
+	}
+
+	public void setKind3(Boolean kind3) {
+		this.kind3 = kind3;
 	}
 
 }

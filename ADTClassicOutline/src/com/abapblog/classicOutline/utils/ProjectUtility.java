@@ -71,11 +71,6 @@ public class ProjectUtility {
 			IAdtFormEditor formEditor = (IAdtFormEditor) editor;
 			IAdtObject model = formEditor.getModel();
 			if (model != null) {
-//				List<EditorSource> editorSources = null;
-//				IAdtStructuralInfoService service = AbapSourceUi.getInstance().getOrCreateStructuralInfoService();
-//				IObjectStructureElement objectStructure = service.getOrLoadObjectStructure(formEditor.getModelFile(),
-//						model, editorSources, true, null);
-//				Map attribures = objectStructure.getAttributes();
 				int count = 0;
 				IProject project = getActiveAdtProject();
 				while (View.linkedObjects.size() > count) {

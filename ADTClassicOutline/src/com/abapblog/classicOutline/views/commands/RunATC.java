@@ -60,6 +60,15 @@ public class RunATC implements IHandler {
 				final IAbapProject abapProject = (IAbapProject) linkedObject.getProject();
 				final AtcWorklistProvider worklistProvider = new AtcWorklistProvider(abapProject);
 				worklistProvider.setCheckvariant(atcOptions.getCheckVariantName());
+//				RunAtcProvider test = new com.sap.adt.atc.ui.internal.launch.RunAtcProvider();
+//				AtcDisplayController atcDisplayController = com.sap.adt.atc.ui.internal.AtcDisplayController
+//						.getInstance();
+//				try {
+//					atcDisplayController.showResult(linkedObject.getProject(), results);
+//				} catch (CoreException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				/*
 				 * AtcResultConfigureTreeDialogStoreModel atcResultConfigureTreeDialogStoreModel
 				 * = this.resultBrowser.selectedUIPreferences

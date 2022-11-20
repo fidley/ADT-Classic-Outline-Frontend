@@ -78,8 +78,10 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 		try {
 			invisibleRoot = new TreeParent(getLinkedObject(), null);
-			if (getLinkedObject() == null || getLinkedObject().isEmpty())
+			if (getLinkedObject() == null || getLinkedObject().isEmpty()) {
+				invisibleRoot.addChild(new TreeNode(getLinkedObject(), getUnsupportedEditorChild()));
 				return;
+			}
 			invisibleRoot.addChild(new TreeNode(getLinkedObject(), getLoadingChild()));
 			TreeContentProvider contentProvider = this;
 			Thread thread = new Thread("GetClassicOutlineViewer") {
@@ -102,6 +104,14 @@ public class TreeContentProvider implements ITreeContentProvider {
 		loading.setText1("Loading...");
 		loading.setText2("data from backend");
 		loading.setType("LOAD");
+		return loading;
+	}
+
+	private SourceNode getUnsupportedEditorChild() {
+		SourceNode loading = new SourceNode(0);
+		loading.setText1("This editor is not supported");
+		loading.setText2("");
+		loading.setType("ERROR");
 		return loading;
 	}
 

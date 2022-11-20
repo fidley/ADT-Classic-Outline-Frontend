@@ -2,8 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Classic Outline
 Bundle-SymbolicName: com.abapblog.classicOutline;singleton:=true
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.0.2.qualifier
 Bundle-Activator: com.abapblog.classicOutline.Activator
+Eclipse-BundleShape: dir
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.sap.conn.jco,
@@ -31,7 +32,8 @@ Require-Bundle: org.eclipse.ui,
  com.sap.adt.activation.ui,
  org.eclipse.jface.text;bundle-version="3.18.100",
  com.sap.adt.tools.abapsource,
- com.sap.adt.atc.ui
+ com.sap.adt.atc.ui,
+ org.eclipse.help
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8,
  JavaSE-15
 Automatic-Module-Name: com.abapblog.classicOutline

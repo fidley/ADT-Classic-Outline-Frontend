@@ -13,6 +13,15 @@
             name="Classic Outline"
             restorable="true">
       </view>
+      <view
+            allowMultiple="false"
+            class="com.abapblog.classicOutline.changelog.ChangeLogView"
+            icon="platform:/plugin/org.eclipse.ui.views.log/icons/elcl16/import_log.png"
+            id="com.abapblog.classicOutline.changelogview"
+            inject="false"
+            name="Classic Outline Changelog"
+            restorable="false">
+      </view>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
@@ -63,5 +72,22 @@
                id="com.abapblog.classicOutline.RunATC"
                name="Run ATC">
          </command>
+      </extension>
+      <extension
+            point="org.eclipse.ui.preferencePages">
+         <page
+               category="com.sap.adt.tools.core.ui.preferencePages.ABAP"
+               class="com.abapblog.classicOutline.preferences.PreferencePage"
+               id="com.abapblog.classicOutline.preferences.PreferencesPage"
+               name="Classic Outline">
+         </page>
+      </extension>
+      <extension
+            point="org.eclipse.help.toc">
+         <toc
+               category="ADT Classic Outline"
+               file="toc.xml"
+               primary="true">
+         </toc>
       </extension>
 </plugin>

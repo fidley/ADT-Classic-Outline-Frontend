@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="abapBlog.com - ADT Classic Outline" topic="html/maintopic.html">
+	<topic label="ADT Classic Outline"  href="html/maintopic.html"> 
+		<topic href="html/changelog.html" label="Changelog">
+     <topic href="html/changelog/version1.0.2.html" label="version 1.0.2">
+     </topic>
+  </topic>
+	</topic>
+</toc>
