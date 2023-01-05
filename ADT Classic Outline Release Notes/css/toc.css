@@ -13,6 +13,12 @@ body {
 	padding: 0 20px 20px 50px;
 }
 
+body {
+	max-width: 1080px;
+	margin: 0 auto !important;
+	float: none !important;
+}
+
 #doc-body,
 body,
 p,

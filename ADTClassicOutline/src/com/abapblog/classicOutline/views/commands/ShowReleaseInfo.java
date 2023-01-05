@@ -5,9 +5,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
-import com.abapblog.classicOutline.views.View;
+import com.abapblog.classicOutline.release.notes.Startup;
 
-public class RefreshViewHandler implements IHandler {
+public class ShowReleaseInfo implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -23,21 +23,19 @@ public class RefreshViewHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		try {
-			View.view.reloadOutlineContent(true, true, false);
-		} catch (Exception e) {
-		}
+		new Startup().openReleaseNotesAsync();
 		return null;
-
 	}
 
 	@Override
 	public boolean isEnabled() {
+		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isHandled() {
+		// TODO Auto-generated method stub
 		return true;
 	}
 

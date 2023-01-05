@@ -8,15 +8,17 @@
 
 <body id="doc-body">
 		<h2 class="heading">ABAP Classic Outline - Changelog version 1.0.2</h2>
-	<h3 class="heading">Front-end changes</h2>
+<blockquote>It is recommended to update also the backend component using abapGit. This allows most of the new functionality and makes this plugin ready for S/4HANA 2021</blockquote>
 <p>
 		<ul id="supported-types" class="list">
 		<li>Help content added to plugin</li>
+		<li>Outline tree is now refreshed at save of the object. Works so far only in case of single save. (Save All still in backlog)</li>
 		<li>Preferences window added in ABAP Development Category<br>
 		<figure>
 		<img src="../../media/preferencesWindow1.0.2.png">
 		<figcaption><strong>Figure 1:</strong> New preferences window</figcaption>
 		</figure></li>
+		<li>You can choose now, if you want the navigation of the outline element to happen on double-click or at selection of element, like in ADT standard Outline</li>
 		<li>Fetch redefinitions for methods parameter<br>If latest backend component is installed and this parameter is enabled, the redefinitions of methods in subclasses are displayed under the method node.<br>
 		In default redefinitions for first level subclasses are fetch. If you wan to load redefinitions from all levels of subclasses, enable parameter <strong>Load all levels of redefinitions for methods</strong>.
 		<br>

@@ -58,6 +58,7 @@ public class View extends ViewPart implements ILinkedWithEditorView, ITreeConten
 		linkedObject = ProjectUtility.getObjectFromEditor();
 		if (linkedObject != null)
 			reloadOutlineContent(false, false, true);
+
 	}
 
 	private void addSaveCommandListener() {
@@ -337,7 +338,7 @@ public class View extends ViewPart implements ILinkedWithEditorView, ITreeConten
 				TreeViewer viewer = contentProvider.getFilteredTree().getViewer();
 				Object[] expandedNodes = contentProvider.getExpandedNodes();
 				viewer.setContentProvider(contentProvider);
-				if (filteredTree.getFilterControl().getText() != "") {
+				if (filteredTree.getFilterControl() != null && filteredTree.getFilterControl().getText() != "") {
 					viewer.expandAll();
 				} else {
 					if (expandedNodes != null && expandedNodes.length > 0) {

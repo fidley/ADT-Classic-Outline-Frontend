@@ -7,7 +7,7 @@ import org.eclipse.core.commands.IHandlerListener;
 
 import com.abapblog.classicOutline.views.View;
 
-public class RefreshViewHandler implements IHandler {
+public class ExpandAll implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -24,11 +24,11 @@ public class RefreshViewHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
-			View.view.reloadOutlineContent(true, true, false);
+			View.getCurrentTree().getViewer().expandAll();
 		} catch (Exception e) {
 		}
-		return null;
 
+		return null;
 	}
 
 	@Override

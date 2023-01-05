@@ -3,11 +3,19 @@ package com.abapblog.classicOutline.tree;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Event;
 
 public class TreeCellLabelProvider extends StyledCellLabelProvider {
+	private Image ImageToDispose;
 
 	public TreeCellLabelProvider() {
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		ImageToDispose.dispose();
 	}
 
 	@Override
@@ -34,7 +42,12 @@ public class TreeCellLabelProvider extends StyledCellLabelProvider {
 
 			cell.setText(styledString.toString());
 			cell.setStyleRanges(styledString.getStyleRanges());
-			cell.setImage(node.getImage());
+			ImageToDispose = node.getImage();
+			try {
+				cell.setImage(ImageToDispose);
+			} catch (Exception e) {
+				System.out.println(e.getLocalizedMessage());
+			}
 		}
 
 		super.update(cell);

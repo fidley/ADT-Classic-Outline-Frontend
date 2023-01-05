@@ -53,7 +53,6 @@ public class ProjectUtility {
 			IWorkbenchWindow window = page.getWorkbenchWindow();
 			ISelection adtSelection = window.getSelectionService().getSelection();
 			IProject project = ProjectUtil.getActiveAdtCoreProject(adtSelection, null, null, null);
-//					IAdtCoreProject.ABAP_PROJECT_NATURE);
 			return project;
 		} catch (Exception e) {
 			return null;

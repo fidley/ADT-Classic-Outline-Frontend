@@ -13,15 +13,6 @@
             name="Classic Outline"
             restorable="true">
       </view>
-      <view
-            allowMultiple="false"
-            class="com.abapblog.classicOutline.changelog.ChangeLogView"
-            icon="platform:/plugin/org.eclipse.ui.views.log/icons/elcl16/import_log.png"
-            id="com.abapblog.classicOutline.changelogview"
-            inject="false"
-            name="Classic Outline Changelog"
-            restorable="false">
-      </view>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
@@ -58,6 +49,56 @@
                   label="Refresh"
                   style="push">
             </command>
+            <command
+                  commandId="com.abapblog.classicOutline.ExpandAll"
+                  icon="platform:/plugin/org.eclipse.ui.editors/icons/full/elcl16/expandall.png"
+                  label="Expand All"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.abapblog.classicOutline.CollapseAll"
+                  icon="platform:/plugin/org.eclipse.ui.editors/icons/full/elcl16/collapseall.png"
+                  label="Collapse All"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.abapblog.classicOutline.More"
+                  icon="platform:/plugin/org.eclipse.ui/icons/full/elcl16/view_menu.png"
+                  label="More"
+                  style="pulldown">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.abapblog.classicOutline.view">
+            <command
+                  commandId="com.abapblog.classicOutline.RunATC"
+                  icon="platform:/plugin/com.sap.adt.atc.ui/icons/etool/AbapTestCockpit.png"
+                  label="Run ATC"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.abapblog.classicOutline.RunUnitTest"
+                  icon="platform:/plugin/com.sap.adt.tools.abapsource.ui/icons/view/aunit_view.png"
+                  label="Run Unit Tests"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.abapblog.classicOutline.RunUnitTestCoverage"
+                  icon="platform:/plugin/com.sap.adt.tools.abapsource.ui/icons/view/aunit_view.png"
+                  label="Run Unit Tests with Coverage"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:com.abapblog.classicOutline.More">
+            <command
+                  commandId="com.abapblog.classicOutline.ReleaseInfo"
+                  icon="platform:/plugin/org.eclipse.ui/icons/full/obj16/info_tsk.png"
+                  label="Release Info"
+                  style="push">
+            </command>
          </menuContribution>
       </extension>
       <extension
@@ -72,6 +113,36 @@
                id="com.abapblog.classicOutline.RunATC"
                name="Run ATC">
          </command>
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.ExpandAll"
+               id="com.abapblog.classicOutline.ExpandAll"
+               name="Expand All">
+         </command>
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.CollapseAll"
+               id="com.abapblog.classicOutline.CollapseAll"
+               name="Collapse All">
+         </command>
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.RunUnitTests"
+               id="com.abapblog.classicOutline.RunUnitTest"
+               name="Run Unit Tests">
+         </command>
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.RunUnitTestsWithCoverage"
+               id="com.abapblog.classicOutline.RunUnitTestCoverage"
+               name="Run Unit Tests With Coverage">
+         </command>
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.ShowReleaseInfo"
+               id="com.abapblog.classicOutline.ReleaseInfo"
+               name="Show Release Info">
+         </command>
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.More"
+               id="com.abapblog.classicOutline.More"
+               name="More">
+         </command>
       </extension>
       <extension
             point="org.eclipse.ui.preferencePages">
@@ -82,12 +153,28 @@
                name="Classic Outline">
          </page>
       </extension>
+
       <extension
-            point="org.eclipse.help.toc">
-         <toc
-               category="ADT Classic Outline"
-               file="toc.xml"
-               primary="true">
-         </toc>
+            point="org.eclipse.ui.editors">
+         <editor
+               class="com.abapblog.classicOutline.release.notes.ReleaseNotesEditor"
+               default="false"
+               icon="media/co16x16.png"
+               id="com.abapblog.classicOutline.release.notes.editor"
+               name="Classic Outline Release Notes">
+         </editor>
+      </extension>
+      <extension
+            point="org.eclipse.ui.startup">
+         <startup
+               class="com.abapblog.classicOutline.release.notes.Startup">
+         </startup>
+      </extension>
+      <extension
+            point="org.eclipse.ui.elementFactories">
+         <factory
+               class="com.abapblog.classicOutline.release.notes.EditorInputPersistant"
+               id="com.abapblog.classicOutline.release.notes.EditorInputPersistant">
+         </factory>
       </extension>
 </plugin>
