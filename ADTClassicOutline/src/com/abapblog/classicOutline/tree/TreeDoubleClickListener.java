@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -19,7 +20,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.PlatformUI;
 
+import com.abapblog.classicOutline.Activator;
 import com.abapblog.classicOutline.api.ApiCallerFactory;
+import com.abapblog.classicOutline.preferences.PreferenceConstants;
+import com.abapblog.classicOutline.preferences.TreeNavigationEvent;
 import com.abapblog.classicOutline.utils.BackendComponentVersionFactory;
 import com.abapblog.classicOutline.views.View;
 import com.sap.adt.tools.abapsource.ui.internal.sources.editors.CompoundTextSelection;
@@ -38,9 +42,17 @@ public class TreeDoubleClickListener implements IDoubleClickListener, ISelection
 
 	private static final int MINIMAL_BASIS_COMPONENT_VERSION_FOR_DIRECT_CALL = 750;
 	private static final int MINIMAL_BACKEND_VERSION_FOR_SEMANTIC_URI = 1;
+	private IPreferenceStore store = null;
+
+	public TreeDoubleClickListener() {
+		store = Activator.getDefault().getPreferenceStore();
+	}
 
 	@Override
 	public void doubleClick(DoubleClickEvent event) {
+		if (navigationThroughDoubleClickEnabled()) {
+			return;
+		}
 		IStructuredSelection thisSelection = (IStructuredSelection) event.getSelection();
 		TreeNode selectedNode = (TreeNode) thisSelection.getFirstElement();
 		String uri = "";
@@ -58,6 +70,11 @@ public class TreeDoubleClickListener implements IDoubleClickListener, ISelection
 			}
 
 		}
+	}
+
+	private boolean navigationThroughDoubleClickEnabled() {
+		return !store.getString(PreferenceConstants.P_TREE_NAVIGATION_TRIGGER)
+				.equals(TreeNavigationEvent.DoubleClick.toString());
 	}
 
 	private void navigateToURI(String uri, IProject project) {
@@ -197,7 +214,6 @@ public class TreeDoubleClickListener implements IDoubleClickListener, ISelection
 		try {
 			CompoundTextSelection selection = (CompoundTextSelection) PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getActivePage().getSelection();
-			AbapSourcePage abapSourcePage = editor.getAdapter(AbapSourcePage.class);
 			IDocument document = editor.getAdapter(AbapSourcePage.class).getDocument();
 			int startLine = selection.getStartLine();
 			int beginningOfName = selection.getOffset() - document.getLineOffset(startLine);
@@ -228,6 +244,9 @@ public class TreeDoubleClickListener implements IDoubleClickListener, ISelection
 
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
+		if (navigationThroughSelectionEnabled()) {
+			return;
+		}
 		IStructuredSelection thisSelection = (IStructuredSelection) event.getSelection();
 		TreeNode selectedNode = (TreeNode) thisSelection.getFirstElement();
 		if (selectedNode == null)
@@ -249,5 +268,10 @@ public class TreeDoubleClickListener implements IDoubleClickListener, ISelection
 			}
 
 		}
+	}
+
+	private boolean navigationThroughSelectionEnabled() {
+		return !store.getString(PreferenceConstants.P_TREE_NAVIGATION_TRIGGER)
+				.equals(TreeNavigationEvent.NodeSelection.toString());
 	}
 }

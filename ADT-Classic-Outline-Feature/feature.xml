@@ -2,11 +2,11 @@
 <feature
       id="ADT_Classic_Outline_Feature"
       label="ADT Classic Outline"
-      version="1.0.2.qualifier"
+      version="1.0.3.qualifier"
       provider-name="Abapblog.com"
       plugin="com.abapblog.branding"
       license-feature="ABAP_Favorites_Feature_Project"
-      license-feature-version="1.0.60.qualifier">
+      license-feature-version="1.0.61.qualifier">
 
    <description>
       Adds new view Classic Outline which works almost same like Outline
@@ -16,7 +16,7 @@ This plugin needs a ABAP Backend components that have to be installed in the sys
 Use abapGit to install repository from https://github.com/fidley/ADT-Classic-Outline-Backend
    </description>
 
-   <copyright url="http://www.example.com/copyright">
+   <copyright>
       [Enter Copyright Description here.]
    </copyright>
 
@@ -25,7 +25,7 @@ Use abapGit to install repository from https://github.com/fidley/ADT-Classic-Out
    </license>
 
    <url>
-      <update label="AbapBlog.com" url="http://abapblog.com/eclipse/plugin/ABAPFavorites"/>
+      <update label="AbapBlog.com" url="https://fidley.github.io/ADTPluginsUpdateSite/UpdateSite/"/>
    </url>
 
    <plugin
@@ -34,5 +34,11 @@ Use abapGit to install repository from https://github.com/fidley/ADT-Classic-Out
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="com.abapblog.classicOutline.release.notes.content"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ADT Classic Outline Release Notes
+Bundle-SymbolicName: com.abapblog.classicOutline.release.notes.content;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.abapblog.classicOutline.release.notes.content.Activator
+Bundle-Vendor: ABAPBlog.com
+Eclipse-BundleShape: dir
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Automatic-Module-Name: com.abapblog.classicOutline.release.notes.content
+Bundle-ActivationPolicy: lazy

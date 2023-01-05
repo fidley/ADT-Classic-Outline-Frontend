@@ -13,7 +13,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 import com.abapblog.classicOutline.views.View;
 
 @SuppressWarnings("restriction")
-public class RunATC implements IHandler {
+public class RunUnitTests implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -35,7 +35,7 @@ public class RunATC implements IHandler {
 			View.view.linkedObject.getLinkedEditor().setFocus();
 			IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
 			try {
-				handlerService.executeCommand("com.sap.adt.atc.ui.launchShortcut.run", null);
+				handlerService.executeCommand("com.sap.adt.tool.abap.unit.launchShortcut.run", null);
 			} catch (ExecutionException e) {
 				e.printStackTrace();
 			} catch (NotDefinedException e) {

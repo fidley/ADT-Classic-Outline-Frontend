@@ -5,9 +5,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
-import com.abapblog.classicOutline.views.View;
-
-public class RefreshViewHandler implements IHandler {
+public class More implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -23,12 +21,8 @@ public class RefreshViewHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		try {
-			View.view.reloadOutlineContent(true, true, false);
-		} catch (Exception e) {
-		}
+		// TODO Auto-generated method stub
 		return null;
-
 	}
 
 	@Override

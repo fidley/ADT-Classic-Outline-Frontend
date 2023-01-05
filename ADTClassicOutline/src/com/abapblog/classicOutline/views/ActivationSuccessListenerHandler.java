@@ -12,7 +12,8 @@ public class ActivationSuccessListenerHandler implements IActivationSuccessListe
 
 	@Override
 	public void onActivationSuccess(List<IAdtObjectReference> adtObject, IProject project) {
-		View.view.reloadOutlineContent(true, true, false);
+		if (View.view != null)
+			View.view.reloadOutlineContent(true, true, false);
 
 	}
 
