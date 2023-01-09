@@ -83,12 +83,7 @@ public class View extends ViewPart implements ILinkedWithEditorView, ITreeConten
 			if (linkedObject != null && filteredTree.containsObject(linkedObject)) {
 				if (refresh) {
 					TreeViewer viewer = filteredTree.getViewer();
-					Object[] expandedNodes = viewer.getExpandedElements();
-					TreeContentProvider contentProvider = new TreeContentProvider(linkedObject, filteredTree,
-							expandedNodes);
-					contentProvider.addContentRefreshListener(this);
-					contentProvider.setRefreshTree(true);
-					contentProvider.initialize();
+					TreeContentProvider contentProvider = createTreeContentProvider(linkedObject, filteredTree, viewer);
 					viewer.setContentProvider(contentProvider);
 				}
 				return filteredTree;
@@ -98,6 +93,16 @@ public class View extends ViewPart implements ILinkedWithEditorView, ITreeConten
 
 		return getNewFilteredTree(parent, linkedObject);
 
+	}
+
+	private TreeContentProvider createTreeContentProvider(LinkedObject linkedObject, OutlineFilteredTree filteredTree,
+			TreeViewer viewer) {
+		Object[] expandedNodes = viewer.getExpandedElements();
+		TreeContentProvider contentProvider = new TreeContentProvider(linkedObject, filteredTree, expandedNodes);
+		contentProvider.addContentRefreshListener(this);
+		contentProvider.setRefreshTree(true);
+		contentProvider.initialize();
+		return contentProvider;
 	}
 
 	private Boolean setExpandedElements(Object[] elementToExpand, TreeContentProvider contentProvider,

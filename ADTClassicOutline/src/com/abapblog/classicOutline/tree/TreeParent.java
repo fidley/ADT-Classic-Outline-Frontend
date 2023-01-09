@@ -37,9 +37,9 @@ public class TreeParent extends TreeNode {
 		TreeParent parent = getParent();
 		int hash;
 		if (parent != null) {
-			hash = Objects.hash(linkedObject, getName(), getType(), parent.getName(), parent.getType());
+			hash = Objects.hash(linkedObject.getParentName(), getName(), getType(), parent.getName(), parent.getType());
 		} else {
-			hash = Objects.hash(linkedObject, getName(), getType(), "", "", "");
+			hash = Objects.hash(linkedObject.getParentName(), getName(), getType(), "", "", "");
 		}
 		return hash;
 	}
