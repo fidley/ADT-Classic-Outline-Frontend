@@ -2,7 +2,7 @@
 <feature
       id="ADT_Classic_Outline_Feature"
       label="ADT Classic Outline"
-      version="1.0.3.qualifier"
+      version="1.0.4.qualifier"
       provider-name="Abapblog.com"
       plugin="com.abapblog.branding"
       license-feature="ABAP_Favorites_Feature_Project"

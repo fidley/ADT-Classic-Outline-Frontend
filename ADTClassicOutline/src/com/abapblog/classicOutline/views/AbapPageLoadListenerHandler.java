@@ -15,11 +15,13 @@ public class AbapPageLoadListenerHandler implements IAbapPageLoadListener {
 	public void pageLoaded(IAbapSourcePage sourcePage) {
 
 		if (sourcePage.getFile().getProject().getName().equals(getDestinationId())) {
-			if (View.getCurrentTree() == null)
-				View.view.reloadOutlineContent(true, true, false);
-			if (View.getCurrentTree() != null && View.getCurrentTree().getLinkedObjects().contains(null))
-				View.view.reloadOutlineContent(true, true, false);
-			AbapPageLoadListener.removeListener(this);
+			if (View.view != null) {
+				if (View.getCurrentTree() == null)
+					View.view.reloadOutlineContent(true, true, false);
+				if (View.getCurrentTree() != null && View.getCurrentTree().getLinkedObjects().contains(null))
+					View.view.reloadOutlineContent(true, true, false);
+				AbapPageLoadListener.removeListener(this);
+			}
 		}
 	}
 
