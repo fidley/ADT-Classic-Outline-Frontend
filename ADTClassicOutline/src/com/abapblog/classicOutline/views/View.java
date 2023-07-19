@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
@@ -225,11 +226,16 @@ public class View extends ViewPart implements ILinkedWithEditorView, ITreeConten
 //			// formEditor.getDocumentProvider().addElementStateListener(new
 //			// AbapStateChangeListener());
 			IProject LinkedProject = ProjectUtility.getActiveAdtProject();
-			if (LinkedProject == null)
+			if (LinkedProject == null) {
+				getViewerForNonManangedEditors();
 				return;
+			}
 			linkedObject = ProjectUtility.getObjectFromEditor(activeEditor);
-			if (linkedObject == null || linkedObject.isEmpty())
+			if (linkedObject == null || linkedObject.isEmpty()) {
+				// if (activeEditor.)
+				getViewerForNonManangedEditors();
 				return;
+			}
 			TreeContentProvider contentProvider = null;
 			try {
 				contentProvider = (TreeContentProvider) getCurrentTree().getViewer().getContentProvider();
@@ -242,6 +248,10 @@ public class View extends ViewPart implements ILinkedWithEditorView, ITreeConten
 			}
 			;
 		}
+	}
+
+	private void getViewerForNonManangedEditors() {
+		getViewerForLinkedObject(container, null, false);
 	}
 
 	@Override
@@ -269,7 +279,8 @@ public class View extends ViewPart implements ILinkedWithEditorView, ITreeConten
 	}
 
 	private void setLinkingWithEditor() {
-		getSite().getPage().addPartListener(this.linkWithEditorPartListener);
+		final IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		workbenchWindow.getPartService().addPartListener(this.linkWithEditorPartListener);
 	}
 
 	public void reloadOutlineContent(boolean refresh, boolean async, boolean direct) {

@@ -109,7 +109,7 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 	private SourceNode getUnsupportedEditorChild() {
 		SourceNode loading = new SourceNode(0);
-		loading.setText1("This editor is not supported");
+		loading.setText1("This editor is not supported or code is not loaded yet");
 		loading.setText2("");
 		loading.setType("ERROR");
 		return loading;
