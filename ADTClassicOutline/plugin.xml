@@ -61,12 +61,6 @@
                   label="Collapse All"
                   style="push">
             </command>
-            <command
-                  commandId="com.abapblog.classicOutline.More"
-                  icon="platform:/plugin/org.eclipse.ui/icons/full/elcl16/view_menu.png"
-                  label="More"
-                  style="pulldown">
-            </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
@@ -92,11 +86,23 @@
          </menuContribution>
          <menuContribution
                allPopups="false"
-               locationURI="menu:com.abapblog.classicOutline.More">
+               locationURI="menu:com.abapblog.classicOutline.view">
             <command
                   commandId="com.abapblog.classicOutline.ReleaseInfo"
                   icon="platform:/plugin/org.eclipse.ui/icons/full/obj16/info_tsk.png"
                   label="Release Info"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.abapblog.classicOutline.openGithub"
+                  icon="media/github.png"
+                  label="Feedback, Bugs &amp; Enhancements"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.abapblog.classicOutline.buyABeer"
+                  icon="media/beer.png"
+                  label="Buy Me a Beer"
                   style="push">
             </command>
          </menuContribution>
@@ -139,9 +145,14 @@
                name="Show Release Info">
          </command>
          <command
-               defaultHandler="com.abapblog.classicOutline.views.commands.More"
-               id="com.abapblog.classicOutline.More"
-               name="More">
+               defaultHandler="com.abapblog.classicOutline.views.commands.OpenGithub"
+               id="com.abapblog.classicOutline.openGithub"
+               name="Feedback, Bugs &amp; Enhancements">
+         </command>
+         <command
+               defaultHandler="com.abapblog.classicOutline.views.commands.BuyMeABeer"
+               id="com.abapblog.classicOutline.buyABeer"
+               name="Buy Me a Beer">
          </command>
       </extension>
       <extension
