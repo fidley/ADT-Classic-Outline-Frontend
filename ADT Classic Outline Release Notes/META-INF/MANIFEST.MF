@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ADT Classic Outline Release Notes
 Bundle-SymbolicName: com.abapblog.classicOutline.release.notes.content;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.5.qualifier
 Bundle-Activator: com.abapblog.classicOutline.release.notes.content.Activator
 Bundle-Vendor: ABAPBlog.com
 Eclipse-BundleShape: dir
