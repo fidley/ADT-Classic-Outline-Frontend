@@ -3,6 +3,8 @@ package com.abapblog.classicOutline.tree;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.ICoreRunnable;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.ui.IEditorPart;
 
@@ -84,18 +86,22 @@ public class TreeContentProvider implements ITreeContentProvider {
 			}
 			invisibleRoot.addChild(new TreeNode(getLinkedObject(), getLoadingChild()));
 			TreeContentProvider contentProvider = this;
-			Thread thread = new Thread("GetClassicOutlineViewer") {
-				@Override
-				public void run() {
+			Job job = Job.create("Classic Outline reload " + getLinkedObject().getName(), (ICoreRunnable) monitor -> {
+				try {
 					invisibleRoot = ApiCallerFactory.getCaller().getObjectTree(getLinkedObject(), refresh);
 					eventListeners.forEach((el) -> el.ContentRefreshed(contentProvider));
-				}
-			};
-			thread.start();
 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				;
+
+			});
+			job.schedule();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		;
 
 	}
 
